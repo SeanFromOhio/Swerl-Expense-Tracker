@@ -19,7 +19,6 @@ from django.views.generic import RedirectView
 
 from .views import MySignupView, MyLoginView
 
-
 urlpatterns = [
     path('admin/', admin.site.urls),
     path("", include("expenses.urls")),

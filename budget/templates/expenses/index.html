@@ -2,11 +2,53 @@
 <html>
 <head>
     <meta charset="UTF-8">
-
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
 </head>
 <body>
 
-    <p>Hello!</p>
+    <form method="POST" action="{% url 'expenses_paths:post_function' %}">
+        {% csrf_token %}
+
+        <div class="card text-white bg-dark mb-3" style="max-width: 24rem;">
+            <div class="card-header">
+                <h4 class="mb-0 text-center">Input Expenses</h4>
+            </div>
+            <div class="card-body">
+                <div>
+                    <label for="expense_amount">Amount: $</label>
+                    <input id="expense_amount" type="number" min="0" placeholder="0" name="expense_amount">
+                </div>
+
+                <div>
+                    <label for="expense_type">Type: </label>
+
+                    <select id="expense_type" name="expense_type">
+                        <option value="food">Food</option>
+                        <option value="personal">Personal</option>
+                        <option value="transportation">Transportation</option>
+                        <option value="housing">Housing</option>
+                        <option value="other">Other</option>
+                    </select>
+
+                </div>
+
+                <div>
+                    <label for="expense_description">Description: </label>
+                    <input id="expense_description" type="text" placeholder="Optional description..." name="description">
+                </div>
+
+                <div>
+                    <label for="expense_date">Input different date than today: </label>
+                    <input id="expense_date" type="checkbox" name="expense_date">
+                </div>
+
+                <div class="text-center">
+                    <button type="submit">Submit</button>
+                </div>
+
+            </div>
+        </div>
+    </form>
 
 </body>
 </html>

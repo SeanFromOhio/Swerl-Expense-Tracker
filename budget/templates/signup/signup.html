@@ -5,7 +5,7 @@
 </head>
 <body>
 
-    <form method=""POST action="signup">
+    <form method="POST" action="signup">
         {% csrf_token %}
         <table>{{ form.as_table }}</table>
         <button type="submit">Register Now!</button>
