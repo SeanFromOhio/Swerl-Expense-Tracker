@@ -16,12 +16,11 @@
             <div class="card-body">
                 <div>
                     <label for="expense_amount">Amount: $</label>
-                    <input id="expense_amount" type="number" min="0" placeholder="0" name="expense_amount">
+                    <input id="expense_amount" type="number" min=".01" placeholder="0" name="expense_amount" step=".01">
                 </div>
 
                 <div>
                     <label for="expense_type">Type: </label>
-
                     <select id="expense_type" name="expense_type">
                         <option value="food">Food</option>
                         <option value="personal">Personal</option>
@@ -29,7 +28,6 @@
                         <option value="housing">Housing</option>
                         <option value="other">Other</option>
                     </select>
-
                 </div>
 
                 <div>
@@ -38,7 +36,7 @@
                 </div>
 
                 <div>
-                    <label for="expense_date">Input different date than today: </label>
+                    <label for="expense_date">Custom date: </label>
                     <input id="expense_date" type="checkbox" name="expense_date">
                 </div>
 
