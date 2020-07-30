@@ -5,8 +5,13 @@
 
 </head>
 <body>
+    <p>Hello {{ user_name }}! This is the expenses page!</p>
 
-    <p>Hello! This is the expenses page!</p>
+    {% for user_expense in user_expenses %}
+        {{ user_expense.expense_date }} - ${{ user_expense.amount }}
+        <br><br>
+    {% endfor %}
+
 
 </body>
 </html>

@@ -9,7 +9,14 @@ def index(request):
 
 
 def expenses_page(request):
-    return render(request, "expenses/expenses.html", {})
+    author_id = request.user.id
+    user_expenses = Expense.objects.filter(author=author_id).order_by("-expense_date")[:10]
+    user_name = request.user.username
+    context = {
+        "user_expenses": user_expenses,
+        "user_name": user_name,
+    }
+    return render(request, "expenses/expenses.html", context)
 
 
 def post_expense(request):
@@ -30,15 +37,6 @@ def post_expense(request):
             expense_call.author = User.objects.get(username=expense_author)
 
             expense_call.save()
-
-            # expense_entry = Expense(
-            #     amount=expense_amount,
-            #     expense_date=expense_date,
-            #     description=expense_description,
-            #     expense_type=expense_type,
-            #     author=User.objects.get(username=expense_author)
-            # )
-            # expense_entry.save()
             return redirect("/")
 
     else:
