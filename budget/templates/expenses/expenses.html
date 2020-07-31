@@ -1,17 +1,13 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <meta charset="UTF-8">
+{% extends "base.html" %}
+{% block title %}
+Profile
+{% endblock title %}
 
-</head>
-<body>
-    <p>Hello {{ user_name }}! This is the expenses page!</p>
+{% block content %}
+<p>Hello {{ user_name }}! This is the expenses page!</p>
 
-    {% for user_expense in user_expenses %}
-        {{ user_expense.expense_date }} - ${{ user_expense.amount }}
-        <br><br>
-    {% endfor %}
-
-
-</body>
-</html>
+{% for user_expense in user_expenses %}
+    {{ user_expense.expense_date }} - ${{ user_expense.amount }}
+    <br><br>
+{% endfor %}
+{% endblock content %}

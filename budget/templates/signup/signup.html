@@ -1,15 +1,10 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <meta charset="UTF-8">
-</head>
-<body>
+{% extends "base.html" %}
+{% block title %} Signup {% endblock title %}
 
-    <form method="POST" action="signup">
-        {% csrf_token %}
-        <table>{{ form.as_table }}</table>
-        <button type="submit">Register Now!</button>
-    </form>
-
-</body>
-</html>
+{% block content %}
+<form method="POST" action="signup">
+    {% csrf_token %}
+    <table>{{ form.as_table }}</table>
+    <button type="submit">Register Now!</button>
+</form>
+{% endblock content %}

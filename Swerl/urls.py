@@ -18,6 +18,7 @@ from django.urls import path, include
 from django.views.generic import RedirectView
 
 from .views import MySignupView, MyLoginView
+from django.contrib.auth.views import LogoutView
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -26,4 +27,5 @@ urlpatterns = [
     path("login", MyLoginView.as_view(), name="login_page"),
     path("signup/", RedirectView.as_view(url="/signup")),
     path("login/", RedirectView.as_view(url="/login")),
+    path("logout", LogoutView.as_view()),
 ]
