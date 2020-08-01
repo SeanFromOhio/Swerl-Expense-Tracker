@@ -28,4 +28,5 @@ urlpatterns = [
     path("signup/", RedirectView.as_view(url="/signup")),
     path("login/", RedirectView.as_view(url="/login")),
     path("logout", LogoutView.as_view()),
+    path("", include("swerl_profile.urls")),
 ]

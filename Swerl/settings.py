@@ -31,6 +31,7 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
+    "swerl_profile",
     "budget",
     "expenses",
     'django.contrib.admin',
