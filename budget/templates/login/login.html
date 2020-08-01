@@ -5,6 +5,6 @@
 <form method="POST" action="login">
     {% csrf_token %}
     <table>{{ form.as_table }}</table>
-    <button type="submit">Login</button>
+    <button type="submit" class="btn btn-outline-dark">Login</button>
 </form>
 {% endblock content %}

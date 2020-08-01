@@ -2,10 +2,12 @@ from django.shortcuts import render, redirect
 from .models import Expense
 from django.contrib.auth.models import User
 from django.http import HttpResponseRedirect
+from datetime import datetime
 
 
 def index(request):
-    return render(request, "expenses/index.html", {})
+    current_date = datetime.now().date()
+    return render(request, "expenses/index.html", {"current_date": current_date})
 
 
 def expenses_page(request):
@@ -24,14 +26,15 @@ def post_expense(request):
         if request.method == "POST":
 
             expense_amount = request.POST.get("expense_amount")
-            # expense_date = request.POST.get("expense_date")
+            expense_date = request.POST.get("custom_date")
             expense_description = request.POST.get("description")
             expense_type = request.POST.get("expense_type")
             expense_author = request.user.username
 
             expense_call = Expense()
             expense_call.amount = expense_amount
-            # expense_call.expense_date = expense_date
+            if expense_date:
+                expense_call.expense_date = expense_date
             expense_call.description = expense_description
             expense_call.expense_type = expense_type
             expense_call.author = User.objects.get(username=expense_author)

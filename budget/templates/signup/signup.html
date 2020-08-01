@@ -2,9 +2,13 @@
 {% block title %} Signup {% endblock title %}
 
 {% block content %}
+<h3 class="text-center">Please signup, it's FREE!</h3>
+
+<br><br>
+
 <form method="POST" action="signup">
     {% csrf_token %}
     <table>{{ form.as_table }}</table>
-    <button type="submit">Register Now!</button>
+    <button type="submit" class="btn btn-outline-dark">Register Now!</button>
 </form>
 {% endblock content %}
