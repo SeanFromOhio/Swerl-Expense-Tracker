@@ -18,29 +18,32 @@
 </div>
 -->
 <br>
-<table class="table table-hover table-success">
-    <caption>Mouseover for descriptions</caption>
-    <thead>
-    <tr>
-        <th scope="col">#</th>
-        <th scope="col">Date</th>
-        <th scope="col">Amount</th>
-        <th scope="col">Type</th>
-    </tr>
-    </thead>
-    {% for user_expense in user_expenses %}
-    <tbody>
-        <tr data-toggle="tooltip" title="{{ user_expense.description }}">
-            <th scope="row">{{ forloop.counter }}</th>
-            <td>{{ user_expense.expense_date }}</td>
-            <td class="text-info">${{ user_expense.amount }}</td>
-            <td>{{ user_expense.expense_type }}</td>
+<div class="container" style="max-width: 500px; max-height: 550px;">
+    <table class="table table-hover table-success">
+        <caption>Mouseover for descriptions</caption>
+        <thead>
+        <tr>
+            <th scope="col">#</th>
+            <th scope="col">Date</th>
+            <th scope="col">Amount</th>
+            <th scope="col">Type</th>
         </tr>
-    </tbody>
-    {% endfor %}
-</table>
+        </thead>
+        {% for user_expense in user_expenses %}
+        <tbody>
+            <tr data-toggle="tooltip" title="{{ user_expense.description }}">
+                <th scope="row">{{ forloop.counter }}</th>
+                <td>{{ user_expense.expense_date }}</td>
+                <td class="text-info">${{ user_expense.amount }}</td>
+                <td>{{ user_expense.expense_type }}</td>
+            </tr>
+        </tbody>
+        {% endfor %}
+    </table>
 
-<div class="text-center">
-    <a class="btn btn-outline-dark" href="/expenses">View All Expenses</a>
+
+    <div class="text-center">
+        <a class="btn btn-outline-dark" href="/expenses">View All Expenses</a>
+    </div>
 </div>
 {% endblock content %}

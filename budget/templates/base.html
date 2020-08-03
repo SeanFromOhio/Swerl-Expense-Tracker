@@ -27,12 +27,7 @@
     {% include "partials/_navbar.html" %}
 
     <!-- Body -->
-    <div class="container">
-        <div class="row">
-            <div class="col-md-auto m-auto">
-                {% block content %}{% endblock content %}
-            </div>
-        </div>
-    </div>
+    {% block content %}{% endblock content %}
+
 </body>
 </html>
