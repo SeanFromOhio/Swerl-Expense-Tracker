@@ -2,9 +2,11 @@
 {% block title %} Login {% endblock title %}
 
 {% block content %}
-<form method="POST" action="login">
-    {% csrf_token %}
-    <table>{{ form.as_table }}</table>
-    <button type="submit" class="btn btn-outline-dark">Login</button>
-</form>
+<div align="center">
+    <form method="POST" action="login">
+        {% csrf_token %}
+        <table>{{ form.as_table }}</table>
+        <button type="submit" class="btn btn-outline-dark">Login</button>
+    </form>
+</div>
 {% endblock content %}

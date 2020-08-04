@@ -49,16 +49,14 @@ Home
 -->
 
 <br>
-<div class="container">
-    <div class="row">
-        <div class="col-md-auto m-auto">
+<div  style="border:1px solid; width:500px; padding:10px; margin:0 auto">
     <form method="POST" action="{% url 'expenses_paths:post_function' %}">
         {% csrf_token %}
         <div class="form-row">
             <div class="form-group col-md-6">
                 <label for="expense_amount">Amount $</label>
                 <input class="form-control" id="expense_amount" type="number" min=".01" placeholder="0"
-                       name="expense_amount" step=".01">
+                       name="expense_amount" step=".01" required>
             </div>
 
             <div class="form-group col-md-6">
@@ -97,6 +95,7 @@ Home
         </div>
     </form>
 </div>
+
 
 <!-- Javascript to allow the checkbox to popup an additional input for a custom date entry -->
 <script>

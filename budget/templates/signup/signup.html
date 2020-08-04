@@ -6,9 +6,11 @@
 
 <br><br>
 
-<form method="POST" action="signup">
-    {% csrf_token %}
-    <table>{{ form.as_table }}</table>
-    <button type="submit" class="btn btn-outline-dark">Register Now!</button>
-</form>
+<div align="center">
+    <form method="POST" action="signup">
+        {% csrf_token %}
+        <table>{{ form.as_table }}</table>
+        <button type="submit" class="btn btn-outline-dark">Register Now!</button>
+    </form>
+</div>
 {% endblock content %}
