@@ -1,0 +1,36 @@
+/* Landing page background image */
+html, body {
+    background-position: center center;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    background-size: cover;
+}
+
+#index_background {
+    background-image: url(/static/images/loose_change.jpg);
+}
+
+/* Landing page expense form */
+#index_expense_form {
+    border:1px solid;
+    width:35%;
+    height: auto;
+    padding:10px;
+    margin: 0;
+    background-color: white;
+    opacity: 85%;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    -ms-transform: translate(-50%, -50%);
+    transform: translate(-50%, -50%);
+}
+
+/* Expense Table Caption */
+#expense_table_caption {
+    color: gray;
+}
+
+.title_case {
+    text-transform: capitalize;
+}

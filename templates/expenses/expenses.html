@@ -1,0 +1,50 @@
+{% extends "base.html" %}
+{% block title %}
+Expenses
+{% endblock title %}
+
+{% block content %}
+<h1 class="text-center" style="font-family: courier;"><ins>{{ user_name }}'s Expenses</ins></h1>
+
+<div class="container">
+    <div class="overflow-auto" style="max-width: 500px; max-height: 550px;">
+        <table class="table table-hover table-active">
+            <thead class="thead-dark">
+            <tr>
+                <th scope="col">#</th>
+                <th scope="col">Date</th>
+                <th scope="col">Amount</th>
+                <th scope="col">Type</th>
+            </tr>
+            </thead>
+            {% for user_expense in user_expenses %}
+            <tbody>
+                <tr data-toggle="tooltip" title="{{ user_expense.description }}">
+                    <th scope="row">{{ forloop.counter }}</th>
+                    <td>{{ user_expense.expense_date }}</td>
+                    <td class="text-info"><b>${{ user_expense.amount }}</b></td>
+                    <td class="title_case">{{ user_expense.expense_type }}</td>
+                </tr>
+            </tbody>
+            {% endfor %}
+        </table>
+    </div>
+    <h6 id="expense_table_caption">Mouseover for descriptions</h6>
+</div>
+
+<!-- Split between the expense and budget pages -->
+<br>
+<hr style="height:2px;color:black;background-color:black;width:90%">
+<br>
+
+<!-- Start of the budget "page" in which you'll be able to see statistics on your budgeting goals -->
+<div id="budget">
+    <h1 class="text-center" style="font-family: courier;"><ins>{{ user_name }}'s Budget</ins></h1>
+
+    <div>
+        <img src=""
+             alt="This is a borrowed budget picture to fill temporary space"
+             style="width:600px;height:700px">
+    </div>
+</div>
+{% endblock content %}
