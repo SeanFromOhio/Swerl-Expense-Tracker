@@ -4,32 +4,48 @@ Expenses
 {% endblock title %}
 
 {% block content %}
-<h1 class="text-center" style="font-family: courier;"><ins>{{ user_name }}'s Expenses</ins></h1>
+<h1 class="text-center"><ins>{{ user_name }}'s Expenses</ins></h1>
 
-<div class="container">
-    <div class="overflow-auto" style="max-width: 500px; max-height: 550px;">
-        <table class="table table-hover table-active">
-            <thead class="thead-dark">
-            <tr>
-                <th scope="col">#</th>
-                <th scope="col">Date</th>
-                <th scope="col">Amount</th>
-                <th scope="col">Type</th>
-            </tr>
-            </thead>
-            {% for user_expense in user_expenses %}
-            <tbody>
-                <tr data-toggle="tooltip" title="{{ user_expense.description }}">
-                    <th scope="row">{{ forloop.counter }}</th>
-                    <td>{{ user_expense.expense_date }}</td>
-                    <td class="text-info"><b>${{ user_expense.amount }}</b></td>
-                    <td class="title_case">{{ user_expense.expense_type }}</td>
-                </tr>
-            </tbody>
-            {% endfor %}
-        </table>
+<div class="container" style="display: flex; height: 700px; justify-content: center;">
+    <div id="leftbox" class="center_div">
+            <div class="overflow-auto" style="max-width: 500px; max-height: 550px; margin: 0 auto;">
+                <table class="table table-hover table-active">
+                    <thead class="thead-dark">
+                    <tr>
+                        <th scope="col">#</th>
+                        <th scope="col">Date</th>
+                        <th scope="col">Amount</th>
+                        <th scope="col">Type</th>
+                    </tr>
+                    </thead>
+                    {% for user_expense in user_expenses %}
+                    <tbody>
+                        <tr data-toggle="tooltip" title="{{ user_expense.description }}">
+                            <th scope="row">{{ forloop.counter }}</th>
+                            <td>{{ user_expense.expense_date }}</td>
+                            <td class="text-info"><b>${{ user_expense.amount }}</b></td>
+                            <td class="title_case">{{ user_expense.expense_type }}</td>
+                        </tr>
+                    </tbody>
+                    {% endfor %}
+                </table>
+            </div>
+
+        <!-- <h6 id="expense_table_caption">Mouseover for descriptions</h6> -->
+
     </div>
-    <h6 id="expense_table_caption">Mouseover for descriptions</h6>
+
+    <div id="rightbox" class="center_div">
+            <div class="chart_size">
+                {% if user.is_authenticated %}
+                    {% autoescape off %}
+                    {{ plot_div }}
+                    {% endautoescape %}
+                {% else %}
+                    <h1>Login to see custom charts!</h1>
+                {% endif %}
+            </div>
+    </div>
 </div>
 
 <!-- Split between the expense and budget pages -->
@@ -39,12 +55,24 @@ Expenses
 
 <!-- Start of the budget "page" in which you'll be able to see statistics on your budgeting goals -->
 <div id="budget">
-    <h1 class="text-center" style="font-family: courier;"><ins>{{ user_name }}'s Budget</ins></h1>
+    <h1 class="text-center"><ins>{{ user_name }}'s Budget</ins></h1>
 
     <div>
         <img src=""
              alt="This is a borrowed budget picture to fill temporary space"
              style="width:600px;height:700px">
+    </div>
+</div>
+
+<div style="width: 40%">
+    <div>
+        {% if user.is_authenticated %}
+            {% autoescape off %}
+            {{ plot_div }}
+            {% endautoescape %}
+        {% else %}
+            <h1>Login to see custom charts!</h1>
+        {% endif %}
     </div>
 </div>
 {% endblock content %}

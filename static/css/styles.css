@@ -4,11 +4,16 @@ html, body {
     background-repeat: no-repeat;
     background-attachment: fixed;
     background-size: cover;
-}
+    }
 
+h1 {
+    font-family: courier;
+    }
+
+/* Landing page background id */
 #index_background {
     background-image: url(/static/images/loose_change.jpg);
-}
+    }
 
 /* Landing page expense form */
 #index_expense_form {
@@ -24,13 +29,64 @@ html, body {
     left: 50%;
     -ms-transform: translate(-50%, -50%);
     transform: translate(-50%, -50%);
-}
+    }
 
 /* Expense Table Caption */
 #expense_table_caption {
     color: gray;
-}
+    }
 
+/* Expense table and chart alignment */
+#leftbox {
+    width: 50%;
+    border: solid;
+    }
+
+#rightbox {
+    width: 50%;
+    border: solid;
+    }
+
+.center_div {
+    display: flex;
+    align-items: center;
+    }
+
+.chart_size {
+    width: 100%;
+    }
+
+/* Pastel Colors */
+.color_orange {
+    background: #F4CDA6;
+    }
+
+.color_blue {
+    background: #A5C8E4;
+    }
+
+.color_green {
+    background: #C0ECCC;
+    }
+
+.color_red {
+    background: #F6A8A6;
+    }
+
+.color_yellow {
+    background: #F9F0C1;
+    }
+
+/* Miscellaneous */
 .title_case {
     text-transform: capitalize;
-}
+    }
+
+.container {
+    border: solid;
+    }
+
+.stickyHeader {
+    position: sticky;
+    top: 0;
+    }
