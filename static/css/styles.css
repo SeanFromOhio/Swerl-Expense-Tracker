@@ -4,6 +4,7 @@ html, body {
     background-repeat: no-repeat;
     background-attachment: fixed;
     background-size: cover;
+    border: white;
     }
 
 h1 {
@@ -15,15 +16,19 @@ h1 {
     background-image: url(/static/images/loose_change.jpg);
     }
 
+/* Navbar styling */
+#navbar-custom {
+    text-shadow: -1px 0 white, 0 1px white, 1px 0 white, 0 -1px white, 0 0 20px black;
+    }
+
 /* Landing page expense form */
 #index_expense_form {
-    border:1px solid;
+    border:10px solid;
     width:35%;
     height: auto;
     padding:10px;
     margin: 0;
     background-color: white;
-    opacity: 85%;
     position: absolute;
     top: 50%;
     left: 50%;
@@ -54,6 +59,7 @@ h1 {
 
 .chart_size {
     width: 100%;
+    border: solid;
     }
 
 /* Pastel Colors */
@@ -90,3 +96,4 @@ h1 {
     position: sticky;
     top: 0;
     }
+
