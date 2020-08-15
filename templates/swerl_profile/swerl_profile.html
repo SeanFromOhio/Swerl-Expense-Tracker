@@ -2,48 +2,62 @@
 {% block title %}Profile{% endblock title %}
 
 {% block content %}
-<!-- Card based expenses table, but not as clean as so this will not be used:
-<div class="card text-white bg-dark mb-3" style="max-width: 24rem;">
-    <div class="card-header">
-        <h4 class="mb-0 text-center">Previous Expenses</h4>
-    </div>
-    <div class="card-body">
-        {% for user_expense in user_expenses %}
-        <span title="{{ user_expense.description }}">{{ forloop.counter }}. &ensp; {{ user_expense.expense_date }} -
-            ${{ user_expense.amount }} [{{ user_expense.expense_type }}]
-        </span>
-            <br><br>
-        {% endfor %}
-    </div>
-</div>
--->
-<br>
-<div class="container" style="max-width: 500px; max-height: 550px;">
-    <table class="table table-hover table-success">
-        <caption>Mouseover for descriptions</caption>
-        <thead>
-        <tr>
-            <th scope="col">#</th>
-            <th scope="col">Date</th>
-            <th scope="col">Amount</th>
-            <th scope="col">Type</th>
-        </tr>
-        </thead>
-        {% for user_expense in user_expenses %}
-        <tbody>
-            <tr data-toggle="tooltip" title="{{ user_expense.description }}">
-                <th scope="row">{{ forloop.counter }}</th>
-                <td>{{ user_expense.expense_date }}</td>
-                <td class="text-info"><b>${{ user_expense.amount }}</b></td>
-                <td class="title_case">{{ user_expense.expense_type }}</td>
+<div class="div_box_frame div_flex">
+    <div class="container" style="margin-left: 0; max-height: 100%;">
+        <!-- Insert the mini data visualizations here -->
+        <div style="width: 100%; border: solid; display: flex;">
+            <div class="div_small_box">
+                <h2 class="h2_arrow_up">Budget: $350</h2>
+            </div>
+            <div class="div_small_box">
+                <h2 class="h2_arrow_down">Past 7 Days: $350</h2>
+            </div>
+            <div class="div_small_box">
+                <h2 class="h2_arrow_up">Past 7 Days: $350</h2>
+            </div>
+            <div class="div_small_box">
+                <h2 class="h2_arrow_down">Past 7 Days: $350</h2>
+            </div>
+        </div>
+
+        <!-- Previous 10 expenses tavble -->
+        <table class="table table-hover" style="border: solid;">
+            <caption>Mouseover for descriptions</caption>
+            <thead>
+            <tr>
+                <th scope="col">#</th>
+                <th scope="col">Date</th>
+                <th scope="col">Amount</th>
+                <th scope="col">Type</th>
             </tr>
-        </tbody>
-        {% endfor %}
-    </table>
-
-
-    <div class="text-center">
-        <a class="btn btn-outline-dark" href="/expenses">View All Expenses</a>
+            </thead>
+            {% for user_expense in user_expenses %}
+            <tbody>
+                <tr data-toggle="tooltip" title="{{ user_expense.description }}">
+                    <th scope="row">{{ forloop.counter }}</th>
+                    <td>{{ user_expense.expense_date }}</td>
+                    <td class="text-info"><b>${{ user_expense.amount }}</b></td>
+                    <td class="title_case">{{ user_expense.expense_type }}</td>
+                </tr>
+            </tbody>
+            {% endfor %}
+        </table>
     </div>
+
+    <div class="div_box_frame" style="display: block; width: 30%; height: 85%;">
+        <div class="div_button_box center_div">
+            <a class="btn btn-outline-light text-center longer_buttons" href="#">Edit Expenses</a>
+        </div>
+        <div class="div_button_box center_div">
+            <a class="btn btn-outline-light text-center longer_buttons" href="#">All Expenses Here</a>
+        </div>
+        <div class="div_button_box center_div">
+            <a class="btn btn-outline-light text-center longer_buttons" href="#">Change Password</a>
+        </div>
+        <div class="div_button_box center_div" style="background: white;">
+            <a class="btn btn-outline-dark text-center longer_buttons" href="/expenses">All Expenses Here</a>
+        </div>
+    </div>
+
 </div>
 {% endblock content %}

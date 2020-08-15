@@ -1,72 +1,114 @@
 {% extends "base.html" %}
 {% block html %}
-<html lang="en" id="index_background">
+<html lang="en">
 {% endblock html %}
 
 {% block title %}
 Home
 {% endblock title %}
 
+{% block navbar %} {% endblock navbar %}
+
 {% block content %}
 
-<div id="index_expense_form">
-    <form method="POST" action="{% url 'expenses_paths:post_function' %}">
-        {% csrf_token %}
-        <div class="form-row">
-            <div class="form-group col-md-6">
-                <label for="expense_amount">Amount $</label>
-                <input class="form-control" id="expense_amount" type="number" min=".01" placeholder="0"
-                       name="expense_amount" step=".01" required>
-            </div>
-
-            <div class="form-group col-md-6">
-                <label for="expense_type">Type </label>
-                <select class="form-control" id="expense_type" name="expense_type">
-                    <option value="food">Food</option>
-                    <option value="personal">Personal</option>
-                    <option value="transportation">Transportation</option>
-                    <option value="housing">Housing</option>
-                    <option value="other">Other</option>
-                </select>
+<div id="index_background">
+    {% include "partials/_navbar.html" %}
+    <div class="center_div" style="height: 80%;">
+        <div style="border: solid; background: rgba(0,0,0, 0.35); border-radius: 50px;">
+            <div class="center_text" style="height: 80%; padding: 100px;">
+                    <h1 class="landing_h1"><b> Welcome to Swerl </b></h1>
+                    <h2 class="landing_h2"> the top-rated expense tracker </h2>
+                    <br>
+                    <a class="btn btn-outline-light btn-lg div_center" id="form_button" style="text-shadow: 0 0 100px white;"
+                       href="#">Start Now</a>
             </div>
         </div>
+    </div>
 
-        <div class="form-group">
-            <label for="expense_description">Description </label>
-            <input class="form-control" id="expense_description" type="text" placeholder="Optional description..."
-                   name="description">
+    <div class="bg-modal" id="esc_close_form">
+
+        <div id="index_expense_form">
+            <div class="close">+</div>
+
+            <form method="POST" action="{% url 'expenses_paths:post_function' %}">
+                {% csrf_token %}
+                <div class="form-row">
+                    <div class="form-group col-md-6">
+                        <label for="expense_amount"><b>Amount $</b></label>
+                        <input class="form-control" id="expense_amount" type="number" min=".01" placeholder="0"
+                               name="expense_amount" step=".01" required>
+                    </div>
+
+                    <div class="form-group col-md-6">
+                        <label for="expense_type"><b>Type</b></label>
+                        <select class="form-control" id="expense_type" name="expense_type">
+                            <option value="food">Food</option>
+                            <option value="personal">Personal</option>
+                            <option value="transportation">Transportation</option>
+                            <option value="housing">Housing</option>
+                            <option value="other">Other</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="expense_description"><b>Description</b></label>
+                    <input class="form-control" id="expense_description" type="text"
+                           placeholder="Optional description..."
+                           name="description">
+                </div>
+
+                <div class="form-check">
+                    <input class="form-check-input" id="expense_date" type="checkbox"
+                           name="expense_date" onclick="custom_date_entry()">
+                    <label for="expense_date"><b>Custom date</b></label>
+                    <small id="passwordHelpInline" class="text-muted">
+                        Default date: Today, {{ current_date }}
+                    </small>
+                </div>
+
+                <div id="custom_date" style="display:none" class="form-group">
+                    <input class="form-control" name="custom_date" type="date" placeholder="Ex. Dec. 30, 1995">
+                </div>
+
+                <div class="text-center">
+                    <button type="submit" class="btn btn-outline-dark">Submit</button>
+                </div>
+            </form>
         </div>
 
-        <div class="form-check">
-            <input class="form-check-input" id="expense_date" type="checkbox"
-                   name="expense_date" onclick="custom_date_entry()">
-            <label for="expense_date">Custom date </label>
-            <small id="passwordHelpInline" class="text-muted">
-                Default date: Today, {{ current_date }}
-            </small>
-        </div>
-
-        <div id="custom_date" style="display:none" class="form-group">
-            <input class="form-control" name="custom_date" type="date" placeholder="Ex. Dec. 30, 1995">
-        </div>
-
-        <div class="text-center">
-            <button type="submit" class="btn btn-outline-dark">Submit</button>
-        </div>
-    </form>
+    </div>
 </div>
 
 <!-- Javascript to allow the checkbox to popup an additional input for a custom date entry -->
 <script>
-function custom_date_entry() {
-  var checkBox = document.getElementById("expense_date");
-  var text = document.getElementById("custom_date");
-  if (checkBox.checked == true){
-    text.style.display = "block";
-  } else {
-     text.style.display = "none";
-  }
-}
+    function custom_date_entry() {
+      var checkBox = document.getElementById("expense_date");
+      var text = document.getElementById("custom_date");
+      if (checkBox.checked == true){
+        text.style.display = "block";
+      } else {
+         text.style.display = "none";
+      }
+    }
 </script>
 
+<!-- JS to pop up the form, exit out of the form, and an escape key exit script -->
+<script>
+    document.getElementById("form_button").addEventListener("click",
+    function() {
+        document.querySelector(".bg-modal").style.display = "flex";
+    });
+
+    document.querySelector(".close").addEventListener("click",
+    function() {
+        document.querySelector(".bg-modal").style.display = "none";
+    });
+
+    document.getElementById("esc_close_form").addEventListener("keydown", function(event) {
+        if (event.keyCode === 27) {
+            document.querySelector(".bg-modal").style.display = "none";
+        }
+    });
+</script>
 {% endblock content %}

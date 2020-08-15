@@ -1,39 +1,134 @@
+@import url("https://fonts.googleapis.com/css?family=Raleway");
+@import url("https://fonts.googleapis.com/css?family=Oswald");
+
+
 /* Landing page background image */
 html, body {
-    background-position: center center;
-    background-repeat: no-repeat;
-    background-attachment: fixed;
-    background-size: cover;
-    border: white;
-    }
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    width: 100%;
+}
 
-h1 {
-    font-family: courier;
-    }
-
-/* Landing page background id */
 #index_background {
-    background-image: url(/static/images/loose_change.jpg);
+    height: 100%;
+    max-width: 100%;
+    background: url(/static/images/loose_change.jpg);
+    background-position: center center;
+    background-size: cover;
+    background-repeat: no-repeat;
+    border: 15px solid white;
+}
+
+/* Font styling and effects */
+h1 {
+    font-family: Raleway;
     }
 
+.landing_h1 {
+    color: #f7f7f7;
+    font-size: 550%;
+}
+
+.landing_h2 {
+    color: #5cb85c;
+    font-size: 200%;
+    text-shadow: -1px 0 black, 0 1px black, 1px 0 black, 0 -1px black, 0 0 100px white;
+}
+
+h2 {
+    font-family: Oswald;
+    text-align: center;
+    }
+
+.h2_arrow_up:after {
+    content: ' \21E7';
+    color: red;
+}
+
+.h2_arrow_down:after {
+    content: ' \21E9';
+    color: green;
+}
+
+/* Div box framing */
+.div_box_frame {
+    width: 100%;
+    height: 100%;
+    padding: 0;
+    border: solid;
+    margin-bottom: 0;
+}
+
+.div_small_box {
+    width: 25%;
+    border: solid;
+    padding: 0;
+    background: ;
+    color: ;
+}
+
+.div_button_box {
+    height: 25%;
+    border: solid;
+    padding: 0;
+    background: black;
+}
+
+.longer_buttons {
+    width: 200px;
+}
+
+.div_flex {
+    display: flex;
+}
 /* Navbar styling */
 #navbar-custom {
-    text-shadow: -1px 0 white, 0 1px white, 1px 0 white, 0 -1px white, 0 0 20px black;
+    text-shadow: -1px 0 #f7f7f7, 0 1px #f7f7f7, 1px 0 #f7f7f7, 0 -1px #f7f7f7, 0 0 100px black;
+    font-size: 130%;
+    font-family: Oswald;
     }
 
-/* Landing page expense form */
-#index_expense_form {
-    border:10px solid;
-    width:35%;
-    height: auto;
-    padding:10px;
-    margin: 0;
-    background-color: white;
+.navbar-brand {
+    font-size: 135%;
+}
+
+/* Modal (popup expense form */
+.bg-modal {
+    width: 100%;
+    height: 100%;
+    left: 0;
+    background: rgba(0, 0, 0, 0.7);
     position: absolute;
-    top: 50%;
-    left: 50%;
-    -ms-transform: translate(-50%, -50%);
-    transform: translate(-50%, -50%);
+    top: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    display: none;
+}
+
+.close {
+    position: absolute;
+    top: -30px;
+    right: -30px;
+    font-size: 40px;
+    transform: rotate(45deg);
+    cursor: pointer;
+    color: #5cb85c;
+}
+
+.close:hover {
+    color: red;
+}
+
+/* Landing page expense form */
+
+#index_expense_form {
+    position: relative;
+    border-radius: 10px;
+    padding:10px;
+    background-color: white;
+    width: 500px;
     }
 
 /* Expense Table Caption */
@@ -55,7 +150,12 @@ h1 {
 .center_div {
     display: flex;
     align-items: center;
+    justify-content: center;
     }
+
+.center_text {
+    text-align: center;
+}
 
 .chart_size {
     width: 100%;
@@ -96,4 +196,3 @@ h1 {
     position: sticky;
     top: 0;
     }
-

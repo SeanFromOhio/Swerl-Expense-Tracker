@@ -49,7 +49,7 @@ def expenses_page(request):
     pie_plot = Figure(Pie(
                     labels=groups, values=amounts,
                     hoverinfo="label+percent", text=text, textinfo="text+value",
-                    textfont=dict(size=15),
+                    textfont=dict(size=15), title="Mouseover %",
                     hole=.3,
                     marker=dict(colors=colors,
                                 line=dict(color="#000000", width=3)
