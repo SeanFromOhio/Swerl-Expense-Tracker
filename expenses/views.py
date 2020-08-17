@@ -85,7 +85,7 @@ def post_expense(request):
             expense_call.author = User.objects.get(username=expense_author)
 
             expense_call.save()
-            return redirect("/")
+            return redirect("/profile/")
 
     else:
         return HttpResponseRedirect("/signup")
