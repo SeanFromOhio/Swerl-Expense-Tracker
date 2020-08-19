@@ -2,10 +2,15 @@
 {% block title %} Login {% endblock title %}
 
 {% block content %}
-<div align="center">
+<h1 class="text-center">Welcome, login to begin!</h1>
+
+<br><br>
+
+<div class="text-center" style="border: solid; width: 20%; margin: auto; padding: 5px;">
     <form method="POST" action="login">
         {% csrf_token %}
         <table>{{ form.as_table }}</table>
+        <br>
         <button type="submit" class="btn btn-outline-dark">Login</button>
     </form>
 </div>

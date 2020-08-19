@@ -16,11 +16,16 @@ Home
     <div class="center_div" style="height: 80%;">
         <div style="border: solid; background: rgba(0,0,0, 0.35); border-radius: 50px;">
             <div class="center_text" style="height: 80%; padding: 100px;">
-                    <h1 class="landing_h1"><b> Welcome to Swerl </b></h1>
-                    <h2 class="landing_h2"> expense tracking made easy </h2>
-                    <br>
+                <h1 class="landing_h1"><b> Welcome to Swerl </b></h1>
+                <h2 class="landing_h2"> expense tracking made easy </h2>
+                <br>
+                {% if user.is_authenticated %}
                     <a class="btn btn-success btn-lg div_center" id="form_button" style="text-shadow: 0 0 100px white;"
-                       href="#">Start Now</a>
+                        href="#">Start Now</a>
+                {% else %}
+                    <a class="btn btn-success btn-lg div_center" style="text-shadow: 0 0 100px white;"
+                        href="/signup">Start Now</a>
+                {% endif %}
             </div>
         </div>
     </div>

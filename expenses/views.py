@@ -62,8 +62,6 @@ def expenses_page(request):
 
     # ----------- BUDGET PAGE ------------
 
-
-
     context = {
         "user_expenses": user_expenses,
         "user_name": user_name,
