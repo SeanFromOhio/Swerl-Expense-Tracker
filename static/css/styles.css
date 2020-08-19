@@ -21,6 +21,12 @@ html, body {
     background-color: gray;
 }
 
+.generic_background {
+    background: #b0aeae;
+    padding: 30px;
+    background-size: cover;
+}
+
 /* Font styling and effects */
 h1 {
     font-family: Raleway;
@@ -59,22 +65,22 @@ h2 {
     height: 100%;
     padding: 0;
     border: solid;
-    margin-bottom: 0;
 }
 
 .div_small_box {
-    width: 25%;
+    width: 50%;
     border: solid;
     padding: 0;
-    background: ;
-    color: ;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 .div_button_box {
     height: 25%;
     border: solid;
     padding: 0;
-    background: black;
+    background: ;
 }
 
 .longer_buttons {
@@ -83,7 +89,16 @@ h2 {
 
 .div_flex {
     display: flex;
+    display: -webkit-flex;
 }
+
+.div_flex_equal_column {
+    display: -webkit-flex;
+    display: flex;
+    flex-direction: row;
+    align-items: stretch;
+}
+
 /* Navbar styling */
 #navbar-custom {
     text-shadow: -1px 0 #f7f7f7, 0 1px #f7f7f7, 1px 0 #f7f7f7, 0 -1px #f7f7f7, 0 0 100px black;

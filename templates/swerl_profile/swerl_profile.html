@@ -2,62 +2,177 @@
 {% block title %}Profile{% endblock title %}
 
 {% block content %}
-<div class="div_box_frame div_flex">
-    <div class="container" style="margin-left: 0; max-height: 100%;">
-        <!-- Insert the mini data visualizations here -->
-        <div style="width: 100%; border: solid; display: flex;">
-            <div class="div_small_box">
-                <h2 class="h2_arrow_up">Budget: $350</h2>
+
+<div class="div_box_frame div_flex_equal_column" style="background: #b0aeae; padding: 30px;">
+        <div style="width: 65%; max-height: 90%; margin-right: 1%; border: solid red;">
+
+            <!-- Insert the mini data visualizations here -->
+            <div style="width: 100%; display: flex; background: white; margin-bottom: 1%;">
+                <div class="div_small_box">
+                    <h2 class="h2_arrow_up">Budget: $350</h2>
+                </div>
+                <div class="div_small_box">
+                    <h2 class="h2_arrow_down">Past 7 Days: $350</h2>
+                </div>
             </div>
-            <div class="div_small_box">
-                <h2 class="h2_arrow_down">Past 7 Days: $350</h2>
-            </div>
-            <div class="div_small_box">
-                <h2 class="h2_arrow_up">Past 7 Days: $350</h2>
-            </div>
-            <div class="div_small_box">
-                <h2 class="h2_arrow_down">Past 7 Days: $350</h2>
+
+            <!-- Previous 10 expenses table -->
+            <div class="table-responsive">
+                <table class="table table-hover" style="border: solid; background: white;">
+                    <!-- <caption style="color: #575757;">Mouseover for descriptions</caption> -->
+
+                    <thead>
+                    <tr>
+                        <th scope="col">#</th>
+                        <th scope="col">Date</th>
+                        <th scope="col">Amount</th>
+                        <th scope="col">Type</th>
+                    </tr>
+                    </thead>
+
+                    {% for user_expense in user_expenses %}
+                    <tbody>
+                        <tr data-toggle="tooltip" title="{{ user_expense.description }}">
+                            <th scope="row">{{ forloop.counter }}</th>
+                            <td>{{ user_expense.expense_date }}</td>
+                            <td class="text-success"><b>${{ user_expense.amount }}</b></td>
+
+                            <!-- if statement for highlighting expense type text -->
+                            {% if user_expense.expense_type == "food" %}
+                                <td class="title_case" style="text-shadow: 0 0 10px #C0ECCC;">{{ user_expense.expense_type }}</td>
+                            {% elif user_expense.expense_type == "personal" %}
+                                <td class="title_case" style="text-shadow: 0 0 10px #F6A8A6;">{{ user_expense.expense_type }}</td>
+                            {% elif user_expense.expense_type == "transportation" %}
+                                <td class="title_case" style="text-shadow: 0 0 10px #F9F0C1;">{{ user_expense.expense_type }}</td>
+                            {% elif user_expense.expense_type == "housing" %}
+                                <td class="title_case" style="text-shadow: 0 0 10px #A5C8E4;">{{ user_expense.expense_type }}</td>
+                            {% elif user_expense.expense_type == "other" %}
+                                <td class="title_case" style="text-shadow: 0 0 10px #F4CDA6;">{{ user_expense.expense_type }}</td>
+                            {% endif %}
+
+                        </tr>
+                    </tbody>
+                    {% endfor %}
+
+                </table>
             </div>
         </div>
 
-        <!-- Previous 10 expenses tavble -->
-        <table class="table table-hover" style="border: solid;">
-            <caption>Mouseover for descriptions</caption>
-            <thead>
-            <tr>
-                <th scope="col">#</th>
-                <th scope="col">Date</th>
-                <th scope="col">Amount</th>
-                <th scope="col">Type</th>
-            </tr>
-            </thead>
-            {% for user_expense in user_expenses %}
-            <tbody>
-                <tr data-toggle="tooltip" title="{{ user_expense.description }}">
-                    <th scope="row">{{ forloop.counter }}</th>
-                    <td>{{ user_expense.expense_date }}</td>
-                    <td class="text-info"><b>${{ user_expense.amount }}</b></td>
-                    <td class="title_case">{{ user_expense.expense_type }}</td>
-                </tr>
-            </tbody>
-            {% endfor %}
-        </table>
-    </div>
+        <!-- Div with the buttons, expense form and user budget card -->
+        <div style="width: 35%; max-height: 90%; padding: 0; border: solid blue;">
+            <div style="width: 100%; min-height: 8%; display: flex; margin-bottom: 5px;">
 
+                <div class="text-center" style="width: 50%; height: 100%; padding: 0;">
+                    <a class="btn btn-success text-center longer_buttons" href="#">Account Settings</a>
+                </div>
+
+                <div class="text-center" style="width: 50%; height: 100%; padding: 0;">
+                    <a class="btn btn-success text-center longer_buttons" href="/expenses/">All Expenses & Budget</a>
+                </div>
+
+            </div>
+
+            <div style="margin-bottom: auto; min-height: 46%;">
+                <form method="POST" action="{% url 'expenses_paths:post_expenses' %}"
+                      style="border: solid; padding: 20px; background: white;">
+                    {% csrf_token %}
+                    <h4 class="text-center">Add Expenses:</h4>
+                    <div class="form-row">
+                        <div class="form-group col-md-6">
+                            <label for="expense_amount"><b>Amount $</b></label>
+                            <input class="form-control" id="expense_amount" type="number" min=".01" placeholder="0"
+                                   name="expense_amount" step=".01" required>
+                        </div>
+
+                        <div class="form-group col-md-6">
+                            <label for="expense_type"><b>Type</b></label>
+                            <select class="form-control" id="expense_type" name="expense_type">
+                                <option value="food">Food</option>
+                                <option value="personal">Personal</option>
+                                <option value="transportation">Transportation</option>
+                                <option value="housing">Housing</option>
+                                <option value="other">Other</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="expense_description"><b>Description</b></label>
+                        <input class="form-control" id="expense_description" type="text"
+                               placeholder="Optional description..."
+                               name="description">
+                    </div>
+
+                    <div class="form-check">
+                        <input class="form-check-input" id="expense_date" type="checkbox"
+                               name="expense_date" onclick="custom_date_entry()">
+                        <label for="expense_date"><b>Custom date</b></label>
+                        <small class="text-muted" style="line-height: 80%;">
+                            Default date: Today, {{ current_date }}
+                        </small>
+                    </div>
+
+                    <div id="custom_date" style="display:none" class="form-group">
+                        <input class="form-control" name="custom_date" type="date" placeholder="Ex. Dec. 30, 1995">
+                    </div>
+
+                    <div class="text-center">
+                        <button type="submit" class="btn btn-outline-success">Submit</button>
+                    </div>
+                </form>
+            </div>
+
+            <div class="text-center" style="background: white; border: solid;">
+                <h5>WEEKLY SPENDING LIMITS:</h5>
+                <p>Total Weekly: $<b>{{ user_budgets.weekly_spending_total }} </b></p>
+                <hr style="height:1px;background-color:black;width:90%; background-color: #5cb85c;">
+                <table class="table" style="margin-bottom: 0;">
+                    <tbody>
+                        <tr>
+                            <td>Food: $<b>{{ user_budgets.weekly_food }} </b></td>
+                            <td>Personal: $<b>{{ user_budgets.weekly_personal }} </b></td>
+                        </tr>
+
+                        <tr>
+                            <td>Transportation: $<b>{{ user_budgets.weekly_transportation }} </b></td>
+                            <td>Housing: $<b>{{ user_budgets.weekly_housing }} </b></td>
+                        </tr>
+                    </tbody>
+                </table>
+                <hr style="margin-top: 0;">
+                <p class="text-center">Other Expenses: $<b>{{ user_budgets.weekly_other }} </b></p>
+            </div>
+        </div>
+
+    <!-- Button placement
     <div class="div_box_frame" style="display: block; width: 30%; height: 85%;">
         <div class="div_button_box center_div">
-            <a class="btn btn-outline-light text-center longer_buttons" href="#">Edit Expenses</a>
+            <a class="btn btn-outline-dark text-center longer_buttons" href="#">Edit Expenses</a>
         </div>
         <div class="div_button_box center_div">
-            <a class="btn btn-outline-light text-center longer_buttons" href="#">All Expenses Here</a>
+            <a class="btn btn-outline-dark text-center longer_buttons" href="#">All Expenses Here</a>
         </div>
         <div class="div_button_box center_div">
-            <a class="btn btn-outline-light text-center longer_buttons" href="#">Change Password</a>
+            <a class="btn btn-outline-dark text-center longer_buttons" href="#">Change Password</a>
         </div>
-        <div class="div_button_box center_div" style="background: white;">
+        <div class="div_button_box center_div">
             <a class="btn btn-outline-dark text-center longer_buttons" href="/expenses">All Expenses Here</a>
         </div>
     </div>
+    -->
 
 </div>
+
+<script>
+    function custom_date_entry() {
+      var checkBox = document.getElementById("expense_date");
+      var text = document.getElementById("custom_date");
+      if (checkBox.checked == true){
+        text.style.display = "block";
+      } else {
+         text.style.display = "none";
+      }
+    }
+</script>
+
 {% endblock content %}

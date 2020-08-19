@@ -30,7 +30,7 @@ Home
         <div id="index_expense_form">
             <div class="close">+</div>
 
-            <form method="POST" action="{% url 'expenses_paths:post_function' %}">
+            <form method="POST" action="{% url 'expenses_paths:post_expenses' %}">
                 {% csrf_token %}
                 <div class="form-row">
                     <div class="form-group col-md-6">

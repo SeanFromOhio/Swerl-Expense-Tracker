@@ -1,3 +1,5 @@
+<!-- CONAINTS EXPENSES AND BUDGET 'PAGE' HTML -->
+
 {% extends "base.html" %}
 {% block title %}
 Expenses
@@ -23,8 +25,21 @@ Expenses
                         <tr data-toggle="tooltip" title="{{ user_expense.description }}">
                             <th scope="row">{{ forloop.counter }}</th>
                             <td>{{ user_expense.expense_date }}</td>
-                            <td class="text-info"><b>${{ user_expense.amount }}</b></td>
-                            <td class="title_case">{{ user_expense.expense_type }}</td>
+                            <td class="text-success"><b>${{ user_expense.amount }}</b></td>
+
+                            <!-- if statement for highlighting expense type text -->
+                            {% if user_expense.expense_type == "food" %}
+                                <td class="title_case" style="text-shadow: 0 0 10px #C0ECCC;">{{ user_expense.expense_type }}</td>
+                            {% elif user_expense.expense_type == "personal" %}
+                                <td class="title_case" style="text-shadow: 0 0 10px #F6A8A6;">{{ user_expense.expense_type }}</td>
+                            {% elif user_expense.expense_type == "transportation" %}
+                                <td class="title_case" style="text-shadow: 0 0 10px #F9F0C1;">{{ user_expense.expense_type }}</td>
+                            {% elif user_expense.expense_type == "housing" %}
+                                <td class="title_case" style="text-shadow: 0 0 10px #A5C8E4;">{{ user_expense.expense_type }}</td>
+                            {% elif user_expense.expense_type == "other" %}
+                                <td class="title_case" style="text-shadow: 0 0 10px #F4CDA6;">{{ user_expense.expense_type }}</td>
+                            {% endif %}
+
                         </tr>
                     </tbody>
                     {% endfor %}
@@ -50,29 +65,28 @@ Expenses
 
 <!-- Split between the expense and budget pages -->
 <br>
-<hr style="height:2px;color:black;background-color:black;width:90%">
+<hr style="height:2px;color:black;background-color:#5cb85c;width:90%">
 <br>
 
+
+
 <!-- Start of the budget "page" in which you'll be able to see statistics on your budgeting goals -->
-<div id="budget">
-    <h1 class="text-center">{{ user_name }}'s Budget</h1>
+<div class="text-center" style="height: 100%; width: 100%; padding: 0;">
 
-    <div>
-        <img src=""
-             alt="This is a borrowed budget picture to fill temporary space"
-             style="width:600px;height:700px">
-    </div>
-</div>
+    <div id="budget">
+        <h1 class="text-center">{{ user_name }}'s Budget</h1>
 
-<div style="width: 40%">
-    <div>
-        {% if user.is_authenticated %}
-            {% autoescape off %}
-            {{ plot_div }}
-            {% endautoescape %}
-        {% else %}
-            <h1>Login to see custom charts!</h1>
-        {% endif %}
     </div>
+
+    <div style="border: solid; width: 40%; margin: auto; padding: 10px;">
+        <form action="{% url 'expenses_paths:post_budgets' %}" method="POST">
+            {% csrf_token %}
+            {{ BudgetForm.as_p }}
+            <div class="text-center">
+                <button type="submit" class="btn btn-outline-success">Submit</button>
+            </div>
+        </form>
+    </div>
+
 </div>
 {% endblock content %}

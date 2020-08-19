@@ -6,6 +6,8 @@ from django.db.models import Sum
 from datetime import datetime
 from plotly.graph_objs import Pie, Scatter, Figure
 from plotly.offline import plot
+from budget.forms import BudgetForm
+from budget.models import Budget
 
 
 def index(request):
@@ -58,10 +60,15 @@ def expenses_page(request):
     # This is needed to view the plot in a localized setting (not online)
     plot_div = plot(pie_plot, output_type="div")
 
+    # ----------- BUDGET PAGE ------------
+
+
+
     context = {
         "user_expenses": user_expenses,
         "user_name": user_name,
         "plot_div": plot_div,
+        "BudgetForm": BudgetForm,
     }
     return render(request, "expenses/expenses.html", context)
 
@@ -89,4 +96,39 @@ def post_expense(request):
 
     else:
         return HttpResponseRedirect("/signup")
+
+
+def post_budget(request):
+    if request.user.username:
+        if request.method == "POST":
+            form = BudgetForm(request.POST)
+            if form.is_valid():
+
+                weekly_spending_total = request.POST.get("weekly_spending_total")
+                weekly_food = request.POST.get("weekly_food")
+                weekly_personal = request.POST.get("weekly_personal")
+                weekly_transportation = request.POST.get("weekly_transportation")
+                weekly_housing = request.POST.get("weekly_housing")
+                weekly_other = request.POST.get("weekly_other")
+                budget_author = request.user.username
+
+                print(weekly_spending_total)
+
+                budget_instance = Budget()
+
+                budget_instance.weekly_spending_total = weekly_spending_total
+                budget_instance.weekly_food = weekly_food
+                budget_instance.weekly_personal = weekly_personal
+                budget_instance.weekly_transportation = weekly_transportation
+                budget_instance.weekly_housing = weekly_housing
+                budget_instance.weekly_other = weekly_other
+                budget_instance.author = User.objects.get(username=budget_author)
+
+                budget_instance.save()
+                return redirect("/profile/")
+
+            else:
+                form = BudgetForm()
+
+            return render(request, 'expenses.html', {'form': form})
 
