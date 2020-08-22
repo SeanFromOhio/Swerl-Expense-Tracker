@@ -18,14 +18,21 @@ Expenses
                         <th scope="col">Date</th>
                         <th scope="col">Amount</th>
                         <th scope="col">Type</th>
+                        <th scope="col"></th>
                     </tr>
                     </thead>
                     {% for user_expense in user_expenses %}
                     <tbody>
                         <tr data-toggle="tooltip" title="{{ user_expense.description }}">
-                            <th scope="row">{{ forloop.counter }}</th>
-                            <td>{{ user_expense.expense_date }}</td>
-                            <td class="text-success"><b>${{ user_expense.amount }}</b></td>
+                            <th scope="row">
+                                {{ forloop.counter }}
+                            </th>
+                            <td>
+                                {{ user_expense.expense_date }}
+                            </td>
+                            <td class="text-success">
+                                <b>${{ user_expense.amount }}</b>
+                            </td>
 
                             <!-- if statement for highlighting expense type text -->
                             {% if user_expense.expense_type == "food" %}
@@ -39,6 +46,9 @@ Expenses
                             {% elif user_expense.expense_type == "other" %}
                                 <td class="title_case" style="text-shadow: 0 0 10px #F4CDA6;">{{ user_expense.expense_type }}</td>
                             {% endif %}
+                            <td>
+                                <a type="button" class="btn btn-outline-dark btn-sm">edit</a>
+                            </td>
 
                         </tr>
                     </tbody>
