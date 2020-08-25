@@ -15,13 +15,23 @@ def profile_page(request):
 
         # Extracts the date (iso-week) from the DB and calculates the total expenses for that week.
         current_wk = datetime.now().isocalendar()[1]
-        wk_expenses_tup = Expense.objects.filter(
-            author=author_id).filter(
+        current_yr = datetime.now().isocalendar()[0]
+
+        wk_expenses_tuple = Expense.objects.filter(
+            author=author_id).filter(expense_date__year=current_yr).filter(
             expense_date__week=current_wk).aggregate(Sum("amount"))
-        wk_expenses = wk_expenses_tup["amount__sum"]
+        wk_expenses = wk_expenses_tuple["amount__sum"]
+
+        # wk_expenses = None, if the user hasn't input an expense for that week, causing an error.
+        if wk_expenses is None:
+            wk_expenses = 0
 
         # Calculates the difference between total spent that week and set total budget per week.
-        budget_difference = abs(user_budgets.weekly_spending_total - wk_expenses)
+        # Checks if the user set up spending limits
+        if user_budgets is None:
+            budget_difference = 0
+        else:
+            budget_difference = abs(user_budgets.weekly_spending_total - wk_expenses)
 
         context = {
             "user_expenses": user_expenses,

@@ -46,10 +46,12 @@ Expenses
                             {% elif user_expense.expense_type == "other" %}
                                 <td class="title_case" style="text-shadow: 0 0 10px #F4CDA6;">{{ user_expense.expense_type }}</td>
                             {% endif %}
-                            <td>
-                                <a type="button" class="btn btn-outline-dark btn-sm">edit</a>
-                            </td>
 
+                            <td><span class="update_form_button">
+                                <button class="btn btn-outline-dark btn-sm" style="border-radius: 20px;">
+                                    {{user_expense.pk}} Edit
+                                </button>
+                            </span></td>
                         </tr>
                     </tbody>
                     {% endfor %}
@@ -73,12 +75,77 @@ Expenses
     </div>
 </div>
 
+<!-- Same modal as index, but this will have auto-filled form to update the expense or delete it. -->
+<div class="bg-modal" id="esc_close_form">
+
+    <div id="index_expense_form">
+        <div class="close">+</div>
+
+        <form method="POST" action="{% url 'expenses_paths:update_expense' %}">
+            {% csrf_token %}
+            <h1 class="text-center"> Edit Expense</h1>
+            <div class="form-row">
+                <div class="form-group col-md-6">
+                    <label for="update_expense_amount"><b>Amount $</b></label>
+                    <input class="form-control" id="update_expense_amount" type="number" min=".01" placeholder="0"
+                           name="expense_amount" step=".01" required>
+                </div>
+
+                <div class="form-group col-md-6">
+                    <label for="update_expense_type"><b>Type</b></label>
+                    <select class="form-control" id="update_expense_type" name="expense_type">
+                        <option value="food">Food</option>
+                        <option value="personal">Personal</option>
+                        <option value="transportation">Transportation</option>
+                        <option value="housing">Housing</option>
+                        <option value="other">Other</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="update_expense_description"><b>Description</b></label>
+                <input class="form-control" id="update_expense_description" type="text"
+                       placeholder="Optional description..."
+                       name="description">
+            </div>
+
+            <div class="form-check">
+                <input class="form-check-input" id="update_expense_date" type="checkbox"
+                       name="expense_date" onclick="update_custom_date_entry()">
+                <label for="update_expense_date"><b>Custom date</b></label>
+                <small class="text-muted">
+                    Default date: Today, {{ current_date }}
+                </small>
+            </div>
+
+            <div id="update_custom_date" style="display:none" class="form-group">
+                <input class="form-control" name="custom_date" type="date" placeholder="Ex. Dec. 30, 1995">
+            </div>
+
+            <div class="text-center">
+                <button type="submit" class="btn btn-outline-success">Submit</button>
+            </div>
+        </form>
+    </div>
+
+</div>
+
+
+<div class="center_div" style="margin-top: 50px; width: 100%;">
+    <div style="border: solid; width: 75%;">
+        {% autoescape off %}
+        {{ plot_div_line }}
+        {% endautoescape %}
+    </div>
+
+</div>
+
+
 <!-- Split between the expense and budget pages -->
 <br>
 <hr style="height:2px;color:black;background-color:#5cb85c;width:90%">
 <br>
-
-
 
 <!-- Start of the budget "page" in which you'll be able to see statistics on your budgeting goals -->
 <div class="text-center" style="height: 100%; width: 100%; padding: 0;">
@@ -99,4 +166,37 @@ Expenses
     </div>
 
 </div>
+
+<!-- [UPDATE FORM] Javascript to allow the checkbox to popup an additional input for a custom date entry -->
+<script>
+    function update_custom_date_entry() {
+      var checkBox = document.getElementById("update_expense_date");
+      var text = document.getElementById("update_custom_date");
+      if (checkBox.checked == true){
+        text.style.display = "block";
+      } else {
+         text.style.display = "none";
+      }
+    }
+</script>
+
+<!-- JS to pop up the form, exit out of the form, and an escape key exit script -->
+<script>
+    $('.update_form_button').click(
+    function() {
+        document.querySelector(".bg-modal").style.display = "flex";
+    });
+
+    document.querySelector(".close").addEventListener("click",
+    function() {
+        document.querySelector(".bg-modal").style.display = "none";
+    });
+
+    document.getElementById("esc_close_form").addEventListener("keydown", function(event) {
+        if (event.keyCode === 27) {
+            document.querySelector(".bg-modal").style.display = "none";
+        }
+    });
+</script>
+
 {% endblock content %}

@@ -9,3 +9,6 @@ class Expense(models.Model):
     description = models.CharField(max_length=100, blank=True)
     expense_type = models.CharField(max_length=100)
     author = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+
+    def __str__(self):
+        return "{} - {} - {}".format(self.amount, self.expense_type, self.expense_date)

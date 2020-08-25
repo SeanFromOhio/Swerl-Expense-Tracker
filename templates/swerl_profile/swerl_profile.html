@@ -68,10 +68,12 @@
                             {% elif user_expense.expense_type == "other" %}
                                 <td class="title_case" style="text-shadow: 0 0 10px #F4CDA6;">{{ user_expense.expense_type }}</td>
                             {% endif %}
-                            <td><span class="update_form_button">
-                                <a class="btn btn-outline-dark btn-sm" style="border-radius: 20px;" href="#">Edit</a>
-                            </span></td>
 
+                                <td><span class="update_form_button">
+                                    <button class="btn btn-outline-dark btn-sm" style="border-radius: 20px;">
+                                        {{user_expense.pk}} Edit
+                                    </button>
+                                </span></td>
 
                         </tr>
                     </tbody>
@@ -86,11 +88,19 @@
             <div style="width: 100%; min-height: 8%; display: flex; margin-bottom: 5px;">
 
                 <div class="text-center" style="width: 50%; height: 100%; padding: 0;">
-                    <a class="btn btn-success text-center longer_buttons" href="#">Account Settings</a>
+                      <a class="btn btn-success dropdown-toggle longer_buttons text-center" href="#" role="button"
+                         id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                          Expenses & Budget
+                      </a>
+
+                    <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+                        <a class="dropdown-item" href="/expenses/">All Expenses</a>
+                        <a class="dropdown-item" href="/expenses/#budget">Edit Budget Limits</a>
+                    </div>
                 </div>
 
                 <div class="text-center" style="width: 50%; height: 100%; padding: 0;">
-                    <a class="btn btn-success text-center longer_buttons" href="/expenses/">All Expenses & Budget</a>
+                    <a class="btn btn-success text-center longer_buttons" href="#">Account Settings</a>
                 </div>
 
             </div>
@@ -145,35 +155,45 @@
                 </form>
             </div>
 
-            <div class="text-center" style="background: white; border: solid;">
-                <h5>WEEKLY SPENDING LIMITS:</h5>
-                <p>Total Weekly: $<b>{{ user_budgets.weekly_spending_total }} </b></p>
-                <hr style="height:1px;background-color:black;width:90%; background-color: #5cb85c;">
-                <table class="table" style="margin-bottom: 0;">
-                    <tbody>
-                        <tr>
-                            <td>Food: $<b>{{ user_budgets.weekly_food }} </b></td>
-                            <td>Personal: $<b>{{ user_budgets.weekly_personal }} </b></td>
-                        </tr>
+            {% if user_budgets is None %}
+                <div class="text-center" style="background: white; border: solid; height: 250px;">
+                    <h5>WEEKLY SPENDING LIMITS:</h5>
+                    <p>Total Weekly: $0.00</p>
+                    <hr style="height:1px;background-color:black;width:90%; background-color: #5cb85c;">
+                    <br><br>
+                    <a class="btn btn-lrg btn-outline-success" href="/expenses/#budget"><b>Set-up Spending Limits</b></a>
+                </div>
 
-                        <tr>
-                            <td>Transportation: $<b>{{ user_budgets.weekly_transportation }} </b></td>
-                            <td>Housing: $<b>{{ user_budgets.weekly_housing }} </b></td>
-                        </tr>
-                    </tbody>
-                </table>
-                <hr style="margin-top: 0;">
-                <p class="text-center">Other Expenses: $<b>{{ user_budgets.weekly_other }} </b></p>
+            {% else %}
+                <div class="text-center" style="background: white; border: solid;">
+                    <h5>WEEKLY SPENDING LIMITS:</h5>
+                    <p>Total Weekly: $<b>{{ user_budgets.weekly_spending_total }} </b></p>
+                    <hr style="height:1px;background-color:black;width:90%; background-color: #5cb85c;">
+                    <table class="table" style="margin-bottom: 0;">
+                        <tbody>
+                            <tr>
+                                <td>Food: $<b>{{ user_budgets.weekly_food }} </b></td>
+                                <td>Personal: $<b>{{ user_budgets.weekly_personal }} </b></td>
+                            </tr>
+
+                            <tr>
+                                <td>Transportation: $<b>{{ user_budgets.weekly_transportation }} </b></td>
+                                <td>Housing: $<b>{{ user_budgets.weekly_housing }} </b></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <hr style="margin-top: 0;">
+                    <p class="text-center">Other Expenses: $<b>{{ user_budgets.weekly_other }} </b></p>
+                </div>
             </div>
-        </div>
-
+        {% endif %}
     <!-- Same modal as index, but this will have auto-filled form to update the expense or delete it. -->
     <div class="bg-modal" id="esc_close_form">
 
         <div id="index_expense_form">
             <div class="close">+</div>
 
-            <form method="POST" action="{% url 'expenses_paths:update_expense'  %}">
+            <form method="POST" action="{% url 'expenses_paths:update_expense' %}">
                 {% csrf_token %}
                 <h1 class="text-center"> Edit Expense</h1>
                 <div class="form-row">
