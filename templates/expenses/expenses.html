@@ -8,9 +8,9 @@ Expenses
 {% block content %}
 <h1 class="text-center">{{ user_name }}'s Expense Breakdown</h1>
 
-<div class="container" style="display: flex; height: 700px; justify-content: center;">
+<div class="container" style="display: flex; height: 1000px; justify-content: center;">
     <div id="leftbox" class="center_div">
-            <div class="overflow-auto" style="max-width: 500px; max-height: 550px; margin: 0 auto;">
+            <div class="overflow-auto" style="max-width: 500px; max-height: 900px; margin: 0 auto; overflow: hidden;">
                 <table class="table table-hover table-active">
                     <thead class="thead-dark">
                     <tr>
@@ -62,11 +62,21 @@ Expenses
 
     </div>
 
-    <div id="rightbox" class="center_div">
-            <div class="chart_size">
+    <div id="rightbox">
+            <div class="chart_size" style="height: 50%;">
                 {% if user.is_authenticated %}
                     {% autoescape off %}
-                    {{ plot_div }}
+                        {{ plot_div }}
+                    {% endautoescape %}
+                {% else %}
+                    <h1>Login to see custom charts!</h1>
+                {% endif %}
+            </div>
+
+            <div class="chart_size" style="height: 50%;">
+                {% if user.is_authenticated %}
+                    {% autoescape off %}
+                        {{ plot_div_bar }}
                     {% endautoescape %}
                 {% else %}
                     <h1>Login to see custom charts!</h1>
@@ -132,15 +142,13 @@ Expenses
 </div>
 
 
-<div class="center_div" style="margin-top: 50px; width: 100%;">
+<div class="center_div" style="width: 100%;">
     <div style="border: solid; width: 75%;">
         {% autoescape off %}
-        {{ plot_div_line }}
+            {{ plot_div_line }}
         {% endautoescape %}
     </div>
-
 </div>
-
 
 <!-- Split between the expense and budget pages -->
 <br>
@@ -151,7 +159,7 @@ Expenses
 <div class="text-center" style="height: 100%; width: 100%; padding: 0;">
 
     <div id="budget">
-        <h1 class="text-center">{{ user_name }}'s Budget</h1>
+        <h1 class="text-center">{{ user_name }}'s Budget Spending Form</h1>
 
     </div>
 

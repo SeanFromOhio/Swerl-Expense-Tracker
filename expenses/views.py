@@ -3,8 +3,8 @@ from .models import Expense
 from django.contrib.auth.models import User
 from django.http import HttpResponseRedirect
 from django.db.models import Sum
-from datetime import datetime
-from plotly.graph_objs import Pie, Scatter, Figure
+from datetime import datetime, date, timedelta
+from plotly.graph_objs import Pie, Scatter, Figure, Bar
 from plotly.offline import plot
 from budget.forms import BudgetForm
 from budget.models import Budget
@@ -44,8 +44,8 @@ def expenses_page(request):
                    housing_amount["amount__sum"], other_amount["amount__sum"]]
 
         # Segment colors
-        # colors = ["#C0ECCC", "#F6A8A6", "#F9F0C1", "#A5C8E4", "#F4CDA6"]
-        colors = ["#5cb85c", "#d9534f", "#f5e83b", "#0275d8", "#f0ad4e"]
+        # colors = ["#C0ECCC", "#F6A8A6", "#F9F0C1", "#A5C8E4", "#F4CDA6"]  # Pastel colors
+        colors = ["#5cb85c", "#d9534f", "#f5e83b", "#0275d8", "#f0ad4e"]  # Bootstrap colors
 
         # Custom '$'
         text = ["$", "$", "$", "$", "$"]
@@ -54,16 +54,31 @@ def expenses_page(request):
         pie_plot = Figure(Pie(
                         labels=groups, values=amounts,
                         hoverinfo="label+percent", text=text, textinfo="text+value",
-                        textfont=dict(size=15), title="Mouseover %",
+                        textfont=dict(size=15),
                         hole=.3,
                         marker=dict(colors=colors,
                                     line=dict(color="#000000", width=3)
-                                    )))
+                                    ),
+        ))
+
+        pie_plot.update_layout(
+            legend=dict(
+                orientation="v",
+            ),
+            title={
+                'text': "Overall Expenses per Type",
+                'y': 0.9,
+                'x': 0.5,
+                'xanchor': 'center',
+                'yanchor': 'top',
+            },
+            # showlegend=False,
+        )
 
         # This is needed to view the plot in a localized setting (not online)
         plot_div = plot(pie_plot, output_type="div")
 
-    # Expense / Budget Line Plot
+    # Line Plot
         # Pandas dataframe of expense model
         expense_user_data = Expense.objects.filter(author=author_id).all().values()
         data = pd.DataFrame(expense_user_data)
@@ -76,74 +91,8 @@ def expenses_page(request):
         # Converting data from daily to weekly and summing the amounts per week
         scatter_plot_data = data.resample("W-MON").agg({"amount": "sum", "expense_type": " - ".join})
 
-
-        # # Query the date & weeks in the model
-        # date_set = Expense.objects.filter(author=author_id).order_by("expense_date")
-        # yr_wks = []
-        # date_lst = []  # Scatter plot x-axis
-        # for date in date_set:
-        #     yr_wks.append(date.expense_date.isocalendar()[:2])
-        #     date_lst.append(date.expense_date.strftime("(%Y, 'Week: %W')"))
-        #
-        # # KNOWN ISSUE: The begging and end of year weeks for isocalendar causes issues when extracting data from the
-        # # model, so a workaround could be to have a conditional statement to test the week and then use strftime
-        # # to format the weeks that need it in order to directly extract the dates needed. strftime is -1 for isoweek.
-        #
-        # yr_wks = list(set(yr_wks))  # Removes the duplicates
-        # yr_wks = sorted(yr_wks, key=lambda x: x[0])  # Sorts the years from lesser to greater iso value
-        # date_lst = list(set(date_lst))
-        # date_lst = map(literal_eval, date_lst)
-        # date_lst = sorted(date_lst, key=lambda x: x[0])
-        # print(date_lst)
-        #
-        # # Must use for loops to iterate over the years/weeks from the DB in order to accurately show all data per week
-        # # Then append those values to corresponding list
-        # wk_total = []
-        # wk_food = []
-        # wk_personal = []
-        # wk_transpo = []
-        # wk_housing = []
-        # wk_other = []
-        #
-        # for yr_wk in yr_wks:
-        #     wk_expenses = Expense.objects.filter(
-        #         author=author_id).filter(expense_date__year=yr_wk[0]).filter(expense_date__week=yr_wk[1]). \
-        #         aggregate(Sum("amount"))
-        #     wk_expenses = wk_expenses["amount__sum"]
-        #     wk_total.append(wk_expenses)
-        #
-        #     food_amount_wk = Expense.objects.filter(expense_type="food"). \
-        #         filter(author=author_id).filter(expense_date__year=yr_wk[0]).filter(expense_date__week=yr_wk[1]). \
-        #         aggregate(Sum("amount"))
-        #     food_amount_wk = food_amount_wk["amount__sum"]
-        #
-        #     personal_amount_wk = Expense.objects.filter(expense_type="personal"). \
-        #         filter(author=author_id).filter(expense_date__year=yr_wk[0]).filter(expense_date__week=yr_wk[1]). \
-        #         aggregate(Sum("amount"))
-        #     personal_amount_wk = personal_amount_wk["amount__sum"]
-        #
-        #     transportation_amount_wk = Expense.objects.filter(expense_type="transportation"). \
-        #         filter(author=author_id).filter(expense_date__year=yr_wk[0]).filter(expense_date__week=yr_wk[1]). \
-        #         aggregate(Sum("amount"))
-        #     transportation_amount_wk = transportation_amount_wk["amount__sum"]
-        #
-        #     housing_amount_wk = Expense.objects.filter(expense_type="housing"). \
-        #         filter(author=author_id).filter(expense_date__year=yr_wk[0]).filter(expense_date__week=yr_wk[1]). \
-        #         aggregate(Sum("amount"))
-        #     housing_amount_wk = housing_amount_wk["amount__sum"]
-        #
-        #     other_amount_wk = Expense.objects.filter(expense_type="other"). \
-        #         filter(author=author_id).filter(expense_date__year=yr_wk[0]).filter(expense_date__week=yr_wk[1]). \
-        #         aggregate(Sum("amount"))
-        #     other_amount_wk = other_amount_wk["amount__sum"]
-        # print(wk_total)
-
-
-        budget_line = Budget.objects.filter(author=author_id).last()
-        budget_line = float(budget_line.weekly_spending_total)
-
-        print(budget_line)
-        print(scatter_plot_data.index.max())
+        budget_data = Budget.objects.filter(author=author_id).last()
+        budget_line = budget_data.weekly_spending_total
 
         trace_wk_tot = Scatter(
             x=scatter_plot_data.index,
@@ -154,18 +103,14 @@ def expenses_page(request):
                 color="#5cb85c",
                 width=4,
             ),
+            marker=dict(
+                size=12,
+            )
         )
 
-        # For possible lines per expense type
-        trace_wk_fd = None
-        trace_wk_pr = None
-        trace_wk_tp = None
-        trace_wk_hs = None
-        trace_wk_ot = None
+        expense_weekly_data = [trace_wk_tot]  # This format in case adding additional traces
 
-        expense_weekly_data = [trace_wk_tot]
-
-        line_plot = Figure(expense_weekly_data)
+        line_plot = Figure(expense_weekly_data)  # Line plot instance
 
         # Total Budget per week line for comparison
         line_plot.add_shape(
@@ -182,17 +127,93 @@ def expenses_page(request):
         )
 
         line_plot.update_layout(
-            title_text="Total Expenses per Week"
+            xaxis_title="Time (Weeks)",
+            yaxis_title="Total Spent ($)",
+            font=dict(
+                size=14,
+            ),
+            yaxis_tickformat="$",
+            title={
+                'text': "Total Expenses per Week",
+                'y': 0.9,
+                'x': 0.5,
+                'xanchor': 'center',
+                'yanchor': 'top',
+            },
+            yaxis={"rangemode": "tozero"},
         )
         plot_div_line = plot(line_plot, output_type="div")
 
-    # ----------- BUDGET PAGE ------------
+    # Bar Chart
+        # Gather data: each expense type and associated budget limit via Pandas
+        # expense_type filters
+        food_filter = (data["expense_type"] == "food")
+        personal_filter = (data["expense_type"] == "personal")
+        transportation_filter = (data["expense_type"] == "transportation")
+        housing_filter = (data["expense_type"] == "housing")
+        other_filter = (data["expense_type"] == "other")
+
+        # expense_date (Current Week) filter
+        previous_monday = date.today() - timedelta(days=date.today().weekday())
+        next_monday = previous_monday + timedelta(weeks=1)
+
+        week_filter = ((data.index >= pd.to_datetime(previous_monday)) & (data.index < pd.to_datetime(next_monday)))
+
+        # Split Current Week data up into expense_type
+        # Pulls the "amount" data based on the above filters and then sums them for the week
+        week_food_amt = data["amount"].loc[week_filter & food_filter].sum()
+        week_personal_amt = data["amount"].loc[week_filter & personal_filter].sum()
+        week_transportation_amt = data["amount"].loc[week_filter & transportation_filter].sum()
+        week_housing_amt = data["amount"].loc[week_filter & housing_filter].sum()
+        week_other_amt = data["amount"].loc[week_filter & other_filter].sum()
+
+        spending_array = [week_food_amt, week_personal_amt, week_transportation_amt,
+                          week_housing_amt, week_other_amt]
+
+        # Budget Type Limits
+        budget_food = budget_data.weekly_food
+        budget_personal = budget_data.weekly_personal
+        budget_transportation = budget_data.weekly_transportation
+        budget_housing = budget_data.weekly_housing
+        budget_other = budget_data.weekly_other
+
+        budget_array = [budget_food, budget_personal, budget_transportation, budget_housing, budget_other]
+
+        # Graph the bar chart
+        types = ["Food", "Personal", "Transport", "Housing", "Other"]
+
+        bar_trace = [Bar(name="Expense Totals", x=types, y=spending_array, marker_color=colors,
+                         text=spending_array, textposition="auto", showlegend=False),
+                     Bar(name="Budget Limits", x=types, y=budget_array, marker_color="purple")
+                     ]
+
+        bar_chart = Figure(bar_trace)
+        bar_chart.update_layout(
+            barmode="group",
+            yaxis_title="Total Spent ($)",
+            yaxis_tickformat="$",
+            title={
+                'text': "Total Expenses vs Budget Limits per Week",
+                'y': 0.9,
+                'x': 0.5,
+                'xanchor': 'center',
+                'yanchor': 'top',
+            },
+            legend=dict(
+                orientation="h",
+            ),
+            # showlegend=False,
+        )
+
+        # Add the chart to the context and plot in html
+        plot_div_bar = plot(bar_chart, output_type="div")
 
         context = {
             "user_expenses": user_expenses,
             "user_name": user_name,
             "plot_div": plot_div,
             "plot_div_line": plot_div_line,
+            "plot_div_bar": plot_div_bar,
             "BudgetForm": BudgetForm,
         }
         return render(request, "expenses/expenses.html", context)
