@@ -11,4 +11,4 @@ class Expense(models.Model):
     author = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
 
     def __str__(self):
-        return "{} - {} - {}".format(self.amount, self.expense_type, self.expense_date)
+        return "Amount: ${} | Type: {} | Date: {}".format(self.amount, self.expense_type.title(), self.expense_date)

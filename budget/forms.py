@@ -1,17 +1,48 @@
 from django import forms
+from .models import Budget
 
 
-class BudgetForm(forms.Form):
-    weekly_spending_total = forms.DecimalField(
-        label="Weekly Spending Budget: $", label_suffix="", max_digits=11, min_value=0, decimal_places=2)
-    weekly_food = forms.DecimalField(
-        label="Food Expense Budget: $", label_suffix="", max_digits=11, min_value=0, decimal_places=2)
-    weekly_personal = forms.DecimalField(
-        label="Personal Expense Budget: $", label_suffix="", max_digits=11, min_value=0, decimal_places=2)
-    weekly_transportation = forms.DecimalField(
-        label="Transportation Expense Budget: $", label_suffix="", max_digits=11, min_value=0, decimal_places=2)
-    weekly_housing = forms.DecimalField(
-        label="Housing Expense Budget: $", label_suffix="", max_digits=11, min_value=0, decimal_places=2)
-    weekly_other = forms.DecimalField(
-        label="Other Expense Budget: $", label_suffix="", max_digits=11, min_value=0, decimal_places=2)
+class BudgetForm(forms.ModelForm):
+    class Meta:
+        model = Budget
+        fields = "__all__"
+        exclude = ("author",)
 
+        widgets = {
+            "weekly_spending_total": forms.NumberInput(attrs={
+                "class": "form-control",
+                "min": "0.01",
+                "placeholder": "0",
+                "step": "0.01",
+            }),
+            "weekly_food": forms.NumberInput(attrs={
+                "class": "form-control",
+                "min": "0.01",
+                "placeholder": "0",
+                "step": "0.01",
+            }),
+            "weekly_personal": forms.NumberInput(attrs={
+                "class": "form-control",
+                "min": "0.01",
+                "placeholder": "0",
+                "step": "0.01",
+            }),
+            "weekly_transportation": forms.NumberInput(attrs={
+                "class": "form-control",
+                "min": "0.01",
+                "placeholder": "0",
+                "step": "0.01",
+            }),
+            "weekly_housing": forms.NumberInput(attrs={
+                "class": "form-control",
+                "min": "0.01",
+                "placeholder": "0",
+                "step": "0.01",
+            }),
+            "weekly_other": forms.NumberInput(attrs={
+                "class": "form-control",
+                "min": "0.01",
+                "placeholder": "0",
+                "step": "0.01",
+            })
+        }

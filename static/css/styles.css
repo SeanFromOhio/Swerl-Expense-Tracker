@@ -70,7 +70,6 @@ h2 {
     width: 100%;
     height: 90%;
     padding: 0;
-    border: solid;
 }
 
 .div_small_box {
@@ -86,7 +85,6 @@ h2 {
     height: 25%;
     border: solid;
     padding: 0;
-    background: ;
 }
 
 .longer_buttons {
@@ -132,8 +130,8 @@ h2 {
 
 .close {
     position: absolute;
-    top: -40px;
-    right: -5px;
+    top: -8px;
+    right: 0px;
     font-size: 40px;
     transform: rotate(45deg);
     cursor: pointer;
@@ -154,6 +152,15 @@ h2 {
     width: 500px;
     }
 
+#delete_form {
+    position: relative;
+    border-radius: 10px;
+    padding:10px;
+    background-color: white;
+    width: 500px;
+    display: none;
+    }
+
 /* Expense Table Caption */
 #expense_table_caption {
     color: gray;
@@ -167,7 +174,6 @@ h2 {
 
 #rightbox {
     width: 50%;
-    border: solid;
     }
 
 .center_div {

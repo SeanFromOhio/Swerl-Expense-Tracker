@@ -37,6 +37,7 @@ Home
 
             <form method="POST" action="{% url 'expenses_paths:post_expenses' %}">
                 {% csrf_token %}
+                <h1 class="text-center">Entry Form</h1>
                 <div class="form-row">
                     <div class="form-group col-md-6">
                         <label for="expense_amount"><b>Amount $</b></label>

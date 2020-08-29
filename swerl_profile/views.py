@@ -45,3 +45,11 @@ def profile_page(request):
 
     else:
         return HttpResponseRedirect("/signup")
+
+
+def account_page(request):
+    user = request.user.username
+    context = {
+        "user": user,
+    }
+    return render(request, "swerl_profile/account.html", context)

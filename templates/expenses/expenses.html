@@ -8,9 +8,9 @@ Expenses
 {% block content %}
 <h1 class="text-center">{{ user_name }}'s Expense Breakdown</h1>
 
-<div class="container" style="display: flex; height: 1000px; justify-content: center;">
-    <div id="leftbox" class="center_div">
-            <div class="overflow-auto" style="max-width: 500px; max-height: 900px; margin: 0 auto; overflow: hidden;">
+<div style="display: flex; height: 1000px; justify-content: center; width: 100%; padding: 30px; padding-top: 0px;">
+    <div id="leftbox">
+            <div class="table-responsive overflow-auto" style="max-height: 900px; overflow: hidden;">
                 <table class="table table-hover table-active">
                     <thead class="thead-dark">
                     <tr>
@@ -47,15 +47,24 @@ Expenses
                                 <td class="title_case" style="text-shadow: 0 0 10px #F4CDA6;">{{ user_expense.expense_type }}</td>
                             {% endif %}
 
-                            <td><span class="update_form_button">
+                            <!-- <td><span class="update_form_button" data-id="{{ user_expense.pk }}" id="row_pk_holder">
                                 <button class="btn btn-outline-dark btn-sm" style="border-radius: 20px;">
                                     {{user_expense.pk}} Edit
                                 </button>
-                            </span></td>
+                            </span></td> -->
+
+                            <td>
+                                <a class="btn btn-outline-dark btn-sm"
+                                   href="{% url 'expenses_paths:update_expense' pk=user_expense.pk %}"
+                                   style="border-radius: 20px;">
+                                    Edit
+                                </a>
+                            </td>
                         </tr>
                     </tbody>
                     {% endfor %}
                 </table>
+
             </div>
 
         <!-- <h6 id="expense_table_caption">Mouseover for descriptions</h6> -->
@@ -85,63 +94,6 @@ Expenses
     </div>
 </div>
 
-<!-- Same modal as index, but this will have auto-filled form to update the expense or delete it. -->
-<div class="bg-modal" id="esc_close_form">
-
-    <div id="index_expense_form">
-        <div class="close">+</div>
-
-        <form method="POST" action="{% url 'expenses_paths:update_expense' %}">
-            {% csrf_token %}
-            <h1 class="text-center"> Edit Expense</h1>
-            <div class="form-row">
-                <div class="form-group col-md-6">
-                    <label for="update_expense_amount"><b>Amount $</b></label>
-                    <input class="form-control" id="update_expense_amount" type="number" min=".01" placeholder="0"
-                           name="expense_amount" step=".01" required>
-                </div>
-
-                <div class="form-group col-md-6">
-                    <label for="update_expense_type"><b>Type</b></label>
-                    <select class="form-control" id="update_expense_type" name="expense_type">
-                        <option value="food">Food</option>
-                        <option value="personal">Personal</option>
-                        <option value="transportation">Transportation</option>
-                        <option value="housing">Housing</option>
-                        <option value="other">Other</option>
-                    </select>
-                </div>
-            </div>
-
-            <div class="form-group">
-                <label for="update_expense_description"><b>Description</b></label>
-                <input class="form-control" id="update_expense_description" type="text"
-                       placeholder="Optional description..."
-                       name="description">
-            </div>
-
-            <div class="form-check">
-                <input class="form-check-input" id="update_expense_date" type="checkbox"
-                       name="expense_date" onclick="update_custom_date_entry()">
-                <label for="update_expense_date"><b>Custom date</b></label>
-                <small class="text-muted">
-                    Default date: Today, {{ current_date }}
-                </small>
-            </div>
-
-            <div id="update_custom_date" style="display:none" class="form-group">
-                <input class="form-control" name="custom_date" type="date" placeholder="Ex. Dec. 30, 1995">
-            </div>
-
-            <div class="text-center">
-                <button type="submit" class="btn btn-outline-success">Submit</button>
-            </div>
-        </form>
-    </div>
-
-</div>
-
-
 <div class="center_div" style="width: 100%;">
     <div style="border: solid; width: 75%;">
         {% autoescape off %}
@@ -166,7 +118,7 @@ Expenses
     <div style="border: solid; width: 40%; margin: auto; padding: 10px;">
         <form action="{% url 'expenses_paths:post_budgets' %}" method="POST">
             {% csrf_token %}
-            {{ BudgetForm.as_p }}
+            {{ budgetform.as_p }}
             <div class="text-center">
                 <button type="submit" class="btn btn-outline-success">Submit</button>
             </div>
@@ -190,9 +142,31 @@ Expenses
 
 <!-- JS to pop up the form, exit out of the form, and an escape key exit script -->
 <script>
-    $('.update_form_button').click(
-    function() {
+    var update_data = $("#id_update_form").serialize();
+    var update_form = $("#id_update_form");
+    var row_pk = $("#row_pk_holder").attr("data-id");
+
+    $('.update_form_button').click(function() {
         document.querySelector(".bg-modal").style.display = "flex";
+    })
+
+    update_form.submit(function() {
+        console.log("Something is happening?")
+        $.ajax({
+            type: update_form.attr("method"),
+            url: update_form.attr("action"),
+            data: {
+                update_data: "update_data",
+                csrfmiddlewaretoken: "{{ csrf_token }}",
+            },
+            success: function(data) {
+                $("index_expense_form").html(data);
+            },
+            error: function(data) {
+
+            }
+        });
+        return false;
     });
 
     document.querySelector(".close").addEventListener("click",

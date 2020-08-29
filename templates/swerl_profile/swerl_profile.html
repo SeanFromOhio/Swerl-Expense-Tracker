@@ -1,10 +1,13 @@
 {% extends "base.html" %}
+{% block html %}
+<html lang="en">
+{% endblock html %}
 {% block title %}Profile{% endblock title %}
 
 {% block content %}
-
-<div class="div_box_frame div_flex_equal_column" style="background: #b0aeae; padding: 30px;">
-        <div style="width: 65%; max-height: 90%; margin-right: 1%; border: solid red;">
+<!-- <body style="background: #b0aeae"> -->
+<div class="div_box_frame div_flex_equal_column"  style="padding: 30px; padding-top: 0px;">
+        <div style="width: 65%; max-height: 90%; margin-right: 1%;">
 
             <!-- Insert the mini data visualizations here -->
             <div style="width: 100%; display: flex; background: white;">
@@ -69,11 +72,19 @@
                                 <td class="title_case" style="text-shadow: 0 0 10px #F4CDA6;">{{ user_expense.expense_type }}</td>
                             {% endif %}
 
-                                <td><span class="update_form_button">
-                                    <button class="btn btn-outline-dark btn-sm" style="border-radius: 20px;">
-                                        {{user_expense.pk}} Edit
-                                    </button>
-                                </span></td>
+                            <!-- <td><span class="update_form_button">
+                                <button class="btn btn-outline-dark btn-sm" style="border-radius: 20px;">
+                                    {{user_expense.pk}} Edit
+                                </button>
+                            </span></td> -->
+
+                            <td>
+                                <a class="btn btn-outline-dark btn-sm"
+                                   href="{% url 'expenses_paths:update_expense' pk=user_expense.pk %}"
+                                   style="border-radius: 20px;">
+                                    Edit
+                                </a>
+                            </td>
 
                         </tr>
                     </tbody>
@@ -84,7 +95,7 @@
         </div>
 
         <!-- Div with the buttons, expense form and user budget card -->
-        <div style="width: 35%; max-height: 90%; padding: 0; border: solid blue;">
+        <div style="width: 35%; max-height: 90%; padding: 0; border:">
             <div style="width: 100%; min-height: 8%; display: flex; margin-bottom: 5px;">
 
                 <div class="text-center" style="width: 50%; height: 100%; padding: 0;">
@@ -100,7 +111,8 @@
                 </div>
 
                 <div class="text-center" style="width: 50%; height: 100%; padding: 0;">
-                    <a class="btn btn-success text-center longer_buttons" href="#">Account Settings</a>
+                    <a class="btn btn-success text-center longer_buttons"
+                       href="{% url 'profile_paths:account_page' %}">Account Settings</a>
                 </div>
 
             </div>
@@ -187,61 +199,6 @@
                 </div>
             </div>
         {% endif %}
-    <!-- Same modal as index, but this will have auto-filled form to update the expense or delete it. -->
-    <div class="bg-modal" id="esc_close_form">
-
-        <div id="index_expense_form">
-            <div class="close">+</div>
-
-            <form method="POST" action="{% url 'expenses_paths:update_expense' %}">
-                {% csrf_token %}
-                <h1 class="text-center"> Edit Expense</h1>
-                <div class="form-row">
-                    <div class="form-group col-md-6">
-                        <label for="update_expense_amount"><b>Amount $</b></label>
-                        <input class="form-control" id="update_expense_amount" type="number" min=".01" placeholder="0"
-                               name="expense_amount" step=".01" required>
-                    </div>
-
-                    <div class="form-group col-md-6">
-                        <label for="update_expense_type"><b>Type</b></label>
-                        <select class="form-control" id="update_expense_type" name="expense_type">
-                            <option value="food">Food</option>
-                            <option value="personal">Personal</option>
-                            <option value="transportation">Transportation</option>
-                            <option value="housing">Housing</option>
-                            <option value="other">Other</option>
-                        </select>
-                    </div>
-                </div>
-
-                <div class="form-group">
-                    <label for="update_expense_description"><b>Description</b></label>
-                    <input class="form-control" id="update_expense_description" type="text"
-                           placeholder="Optional description..."
-                           name="description">
-                </div>
-
-                <div class="form-check">
-                    <input class="form-check-input" id="update_expense_date" type="checkbox"
-                           name="expense_date" onclick="update_custom_date_entry()">
-                    <label for="update_expense_date"><b>Custom date</b></label>
-                    <small class="text-muted">
-                        Default date: Today, {{ current_date }}
-                    </small>
-                </div>
-
-                <div id="update_custom_date" style="display:none" class="form-group">
-                    <input class="form-control" name="custom_date" type="date" placeholder="Ex. Dec. 30, 1995">
-                </div>
-
-                <div class="text-center">
-                    <button type="submit" class="btn btn-outline-success">Submit</button>
-                </div>
-            </form>
-        </div>
-
-    </div>
 
 </div>
 

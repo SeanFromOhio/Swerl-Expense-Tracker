@@ -1,5 +1,6 @@
 from django.shortcuts import render, redirect
 from .models import Expense
+from expenses.forms import ExpenseForm
 from django.contrib.auth.models import User
 from django.http import HttpResponseRedirect
 from django.db.models import Sum
@@ -91,8 +92,11 @@ def expenses_page(request):
         # Converting data from daily to weekly and summing the amounts per week
         scatter_plot_data = data.resample("W-MON").agg({"amount": "sum", "expense_type": " - ".join})
 
-        budget_data = Budget.objects.filter(author=author_id).last()
-        budget_line = budget_data.weekly_spending_total
+        if Budget.objects.filter(author=author_id).last():
+            budget_data = Budget.objects.filter(author=author_id).last()
+            budget_line = budget_data.weekly_spending_total
+        else:
+            budget_line = None
 
         trace_wk_tot = Scatter(
             x=scatter_plot_data.index,
@@ -113,18 +117,19 @@ def expenses_page(request):
         line_plot = Figure(expense_weekly_data)  # Line plot instance
 
         # Total Budget per week line for comparison
-        line_plot.add_shape(
-            type="line",
-            x0=scatter_plot_data.index.min(),
-            y0=budget_line,
-            x1=scatter_plot_data.index.max(),
-            y1=budget_line,
-            line=dict(
-                color="#d9534f",
-                width=2,
-                dash="dash",
-            ),
-        )
+        if budget_line:
+            line_plot.add_shape(
+                type="line",
+                x0=scatter_plot_data.index.min(),
+                y0=budget_line,
+                x1=scatter_plot_data.index.max(),
+                y1=budget_line,
+                line=dict(
+                    color="#d9534f",
+                    width=2,
+                    dash="dash",
+                ),
+            )
 
         line_plot.update_layout(
             xaxis_title="Time (Weeks)",
@@ -171,11 +176,20 @@ def expenses_page(request):
                           week_housing_amt, week_other_amt]
 
         # Budget Type Limits
-        budget_food = budget_data.weekly_food
-        budget_personal = budget_data.weekly_personal
-        budget_transportation = budget_data.weekly_transportation
-        budget_housing = budget_data.weekly_housing
-        budget_other = budget_data.weekly_other
+        if Budget.objects.filter(author=author_id).last():
+            budget_data = Budget.objects.filter(author=author_id).last()
+
+            budget_food = budget_data.weekly_food
+            budget_personal = budget_data.weekly_personal
+            budget_transportation = budget_data.weekly_transportation
+            budget_housing = budget_data.weekly_housing
+            budget_other = budget_data.weekly_other
+        else:
+            budget_food = None
+            budget_personal = None
+            budget_transportation = None
+            budget_housing = None
+            budget_other = None
 
         budget_array = [budget_food, budget_personal, budget_transportation, budget_housing, budget_other]
 
@@ -208,13 +222,30 @@ def expenses_page(request):
         # Add the chart to the context and plot in html
         plot_div_bar = plot(bar_chart, output_type="div")
 
+# Budget Form Instance
+        if Budget.objects.last():
+            budget_info = Budget.objects.last()
+            budgetform = BudgetForm(instance=budget_info)
+        else:
+            budgetform = BudgetForm()
+
+# Update Expense Form
+        if Expense.objects.last():
+            # expense_info = Expense.objects.get(id=pk)
+            # expenseform = ExpenseForm(instance=expense_info)
+            expenseform = ExpenseForm()
+        else:
+            expenseform = ExpenseForm()
+
         context = {
             "user_expenses": user_expenses,
             "user_name": user_name,
             "plot_div": plot_div,
             "plot_div_line": plot_div_line,
             "plot_div_bar": plot_div_bar,
-            "BudgetForm": BudgetForm,
+            "budgetform": budgetform,
+            "expenseform": expenseform,
+            "current_date": datetime.now().date(),
         }
         return render(request, "expenses/expenses.html", context)
 
@@ -248,59 +279,53 @@ def post_expense(request):
 
 
 def post_budget(request):
+    if Budget.objects.last():
+        budget_info = Budget.objects.last()
+    else:
+        budgetform = BudgetForm()
+
     if request.user.username:
         if request.method == "POST":
-            form = BudgetForm(request.POST)
-            if form.is_valid():
-
-                weekly_spending_total = request.POST.get("weekly_spending_total")
-                weekly_food = request.POST.get("weekly_food")
-                weekly_personal = request.POST.get("weekly_personal")
-                weekly_transportation = request.POST.get("weekly_transportation")
-                weekly_housing = request.POST.get("weekly_housing")
-                weekly_other = request.POST.get("weekly_other")
-                budget_author = request.user.username
-
-                print(weekly_spending_total)
-
-                budget_instance = Budget()
-
-                budget_instance.weekly_spending_total = weekly_spending_total
-                budget_instance.weekly_food = weekly_food
-                budget_instance.weekly_personal = weekly_personal
-                budget_instance.weekly_transportation = weekly_transportation
-                budget_instance.weekly_housing = weekly_housing
-                budget_instance.weekly_other = weekly_other
-                budget_instance.author = User.objects.get(username=budget_author)
-
-                budget_instance.save()
+            author = Budget(author=request.user)
+            budgetform = BudgetForm(request.POST, instance=author)
+            if budgetform.is_valid():
+                author.save()
                 return redirect("/profile/")
 
             else:
-                form = BudgetForm()
+                budgetform = BudgetForm(instance=budget_info)
 
-            return render(request, 'expenses.html', {'form': form})
+            return render(request, 'expenses.html', {'budgetform': budgetform})
 
 
 def update_expense(request, pk):
-    print(pk)
+    expense_info = Expense.objects.get(id=pk)
+    expenseform = ExpenseForm(instance=expense_info)
 
     if request.user.username:
         if request.method == "POST":
+            expenseform = ExpenseForm(request.POST, instance=expense_info)
+            if expenseform.is_valid():
+                expenseform.save()
+                return redirect("/profile/")
 
-            expense_amount = request.POST.get("expense_amount")
-            expense_date = request.POST.get("custom_date")
-            expense_description = request.POST.get("description")
-            expense_type = request.POST.get("expense_type")
-            expense_author = request.user.username
+        else:
+            context = {
+                "expenseform": expenseform,
+                "current_date": datetime.now().date(),
+                "expense_info": expense_info,
+            }
+            return render(request, "expenses/update_expense.html", context)
 
-            expense_call = Expense()
-            expense_call.amount = expense_amount
-            if expense_date:
-                expense_call.expense_date = expense_date
-            expense_call.description = expense_description
-            expense_call.expense_type = expense_type
-            expense_call.author = User.objects.get(username=expense_author)
 
-            expense_call.save()
-            return redirect("/profile/")
+def delete_expense(request, pk):
+    expense_info = Expense.objects.get(id=pk)
+    print(expense_info)
+    if request.method == "POST":
+        expense_info.delete()
+        return redirect("/profile/")
+    context = {
+        "current_date": datetime.now().date(),
+        "expense_info": expense_info,
+    }
+    return render(request, "expenses/update_expense.html", context)

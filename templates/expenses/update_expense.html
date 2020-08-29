@@ -1,0 +1,125 @@
+<!-- CONAINTS THE FORM TO UPDATE AN EXPENSE OR DELETE IT -->
+
+{% extends "base.html" %}
+{% block title %}
+Edit Expense
+{% endblock title %}
+
+{% block content %}
+
+<!-- Same modal as index, but this will have auto-filled form to update the expense or delete it. -->
+
+<div class="bg-modal" id="esc_close_form" style="display:flex;">
+
+    <div id="index_expense_form">
+        <div class="close">
+            <a href="/profile/" style="color: inherit; text-decoration: none;">+</a>
+        </div>
+
+        <form method="POST" action="">
+            {% csrf_token %}
+            <h1 class="text-center"> Edit Expense</h1>
+            <div class="form-row">
+                <div class="form-group col-md-6">
+                    <label for="update_expense_amount"><b>Amount $</b></label>
+                    {{ expenseform.amount }}
+                </div>
+
+                <div class="form-group col-md-6">
+                    <label for="update_expense_type"><b>Type</b></label>
+                    {{ expenseform.expense_type }}
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="update_expense_description"><b>Description</b></label>
+                {{ expenseform.description }}
+            </div>
+
+            <div class="form-check">
+                <input class="form-check-input" id="update_expense_date" type="checkbox"
+                       name="expense_date" checked onclick="update_custom_date_entry()">
+                <label for="update_expense_date"><b>Custom date</b></label>
+                <small class="text-muted">
+                    Default date: Today, {{ current_date }}
+                </small>
+            </div>
+
+            <div id="update_custom_date" class="form-group">
+                {{ expenseform.expense_date }}
+            </div>
+
+            <div class="text-center">
+                <button type="submit" style="margin-right: 30px;" class="btn btn-outline-success longer_buttons">
+                    Save
+                </button>
+
+                <button type="button" class="confirm_delete btn btn-outline-danger longer_buttons">
+                    Delete
+                </button>
+            </div>
+        </form>
+    </div>
+
+    <div id="delete_form">
+        <form method="POST" action="{% url 'expenses_paths:delete_expense' pk=expense_info.pk %}">
+            {% csrf_token %}
+            <h6 class="text-center">
+                <span style="font-size: 120%; font-wight: bold;">Delete:</span>
+                <br>
+                <span class="text-success">{{ expense_info }}</span>
+            </h6>
+
+            <div class="text-center">
+                <button type="submit" class="btn btn-outline-success longer_buttons" style="margin-right: 30px">
+                    Confirm
+                </button>
+
+                <button type="button" class="cancel_delete btn btn-outline-danger longer_buttons">
+                    Cancel
+                </button>
+            </div>
+
+        </form>
+    </div>
+
+</div>
+
+<!-- [UPDATE FORM] Javascript to allow the checkbox to popup an additional input for a custom date entry -->
+<script>
+    function update_custom_date_entry() {
+      var checkBox = document.getElementById("update_expense_date");
+      var text = document.getElementById("update_custom_date");
+      if (checkBox.checked == true){
+        text.style.display = "block";
+      } else {
+         text.style.display = "none";
+      }
+    }
+</script>
+
+<script>
+    $('.update_form_button').click(function() {
+        document.querySelector(".bg-modal").style.display = "flex";
+    })
+
+    document.querySelector(".confirm_delete").addEventListener("click",
+    function() {
+        document.querySelector("#delete_form").style.display = "block";
+        document.querySelector("#index_expense_form").style.display = "none";
+    });
+
+    document.querySelector(".cancel_delete").addEventListener("click",
+    function() {
+        document.querySelector("#delete_form").style.display = "none";
+        document.querySelector("#index_expense_form").style.display = "block";
+    });
+
+    document.getElementById("esc_close_form").addEventListener("keydown", function(event) {
+        if (event.keyCode === 27) {
+            document.querySelector(".bg-modal").style.display = "none";
+        }
+    });
+</script>
+
+{% endblock content %}
