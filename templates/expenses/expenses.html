@@ -6,11 +6,10 @@ Expenses
 {% endblock title %}
 
 {% block content %}
-<h1 class="text-center">{{ user_name }}'s Expense Breakdown</h1>
 
-<div style="display: flex; height: 1000px; justify-content: center; width: 100%; padding: 30px; padding-top: 0px;">
-    <div id="leftbox">
-            <div class="table-responsive overflow-auto" style="max-height: 900px; overflow: hidden;">
+<div style="display: flex; height: 1000px; justify-content: center; width: 100%; padding: 30px; padding-top: 0px; padding-bottom: 0px;">
+    <div id="leftbox" style="margin-right: 1%;">
+            <div class="table-responsive overflow-auto" style="max-height: 1000px; overflow: hidden; border: solid;">
                 <table class="table table-hover table-active">
                     <thead class="thead-dark">
                     <tr>
@@ -94,8 +93,8 @@ Expenses
     </div>
 </div>
 
-<div class="center_div" style="width: 100%;">
-    <div style="border: solid; width: 75%;">
+<div class="center_div" style="width: 100%; padding: 30px; padding-top: 0px; margin-top: 1%;">
+    <div style="border: solid; width: 100%;">
         {% autoescape off %}
             {{ plot_div_line }}
         {% endautoescape %}

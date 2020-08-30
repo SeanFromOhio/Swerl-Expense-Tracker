@@ -12,3 +12,8 @@ class MySignupView(CreateView):
 class MyLoginView(LoginView):
     redirect_authenticated_user = True
     template_name = "login/login.html"
+
+
+class PasswordChangeView(CreateView):
+    success_url="logout"
+

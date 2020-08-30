@@ -16,6 +16,7 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include
 from django.views.generic import RedirectView
+from django.contrib.auth import views as auth_views
 
 from .views import MySignupView, MyLoginView
 from django.contrib.auth.views import LogoutView
@@ -29,4 +30,5 @@ urlpatterns = [
     path("login/", RedirectView.as_view(url="/login")),
     path("logout", LogoutView.as_view()),
     path("", include("swerl_profile.urls")),
+    path("password-change", auth_views.PasswordChangeView.as_view(success_url="logout"), name="password_change"),
 ]
