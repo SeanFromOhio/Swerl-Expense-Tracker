@@ -1,5 +1,5 @@
 # Swerl-Expense-Tracker
-Expense tracker built on Django framework. My first major unguided project, which taught me A LOT! Very proud of what I've built, and cannot wait to build more.
+Expense tracker built on the Django framework. My first major unguided project, which taught me A LOT! Very proud of what I've built, and cannot wait to learn and build more.
 
 # Technologies / Libraries:
 1) Python - Django Framework
