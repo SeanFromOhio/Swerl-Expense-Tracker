@@ -54,7 +54,7 @@ def expenses_page(request):
         # The plot creator
         pie_plot = Figure(Pie(
                         labels=groups, values=amounts,
-                        hoverinfo="label+percent", text=text, textinfo="text+value",
+                        hoverinfo="text+value", text=text, textinfo="label+percent",
                         textfont=dict(size=15),
                         hole=.3,
                         marker=dict(colors=colors,
@@ -67,7 +67,7 @@ def expenses_page(request):
                 orientation="v",
             ),
             title={
-                'text': "Overall Expenses per Type",
+                'text': "Overall Expenses per Type (% / $)",
                 'y': 0.9,
                 'x': 0.5,
                 'xanchor': 'center',
