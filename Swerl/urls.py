@@ -18,8 +18,12 @@ from django.urls import path, include
 from django.views.generic import RedirectView
 from django.contrib.auth import views as auth_views
 
-from .views import MySignupView, MyLoginView
+from .views import MySignupView, MyLoginView, ChangePasswordDone
 from django.contrib.auth.views import LogoutView
+
+admin.site.site_header = 'Swerl'                    # default: "Django Administration"
+admin.site.index_title = 'Swerl Admin Area'                 # default: "Site administration"
+admin.site.site_title = 'Swerl Admin' # default: "Django site admin"
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -30,5 +34,7 @@ urlpatterns = [
     path("login/", RedirectView.as_view(url="/login")),
     path("logout", LogoutView.as_view()),
     path("", include("swerl_profile.urls")),
-    path("password-change", auth_views.PasswordChangeView.as_view(success_url="logout"), name="password_change"),
+    path("password-change", auth_views.PasswordChangeView.as_view(success_url="password-change/done/"), name="password_change"),
+    path("password-change/", RedirectView.as_view(url="/password-change")),
+    path("password-change/done/", ChangePasswordDone),
 ]

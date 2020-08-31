@@ -198,7 +198,7 @@ def expenses_page(request):
 
         bar_trace = [Bar(name="Expense Totals", x=types, y=spending_array, marker_color=colors,
                          text=spending_array, textposition="auto", showlegend=False),
-                     Bar(name="Budget Limits", x=types, y=budget_array, marker_color="purple")
+                     Bar(name="Budget Limits", x=types, y=budget_array, marker_color="#cfb3ff")
                      ]
 
         bar_chart = Figure(bar_trace)
